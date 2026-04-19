@@ -1,0 +1,183 @@
+@{
+    Layout = "~/Views/Shared/_CustomLayoutPublic.cshtml";
+    ViewData["Title"] = "History";
+}
+    <div class="relative flex min-h-screen flex-col overflow-x-hidden w-full">
+        <!-- Header Section -->
+        <header class="sticky top-0 z-50 w-full border-b border-border-dark bg-background-dark/95 backdrop-blur-md px-6 md:px-20 py-4">
+            <div class="max-w-[1200px] mx-auto flex items-center justify-between gap-4">
+                <div class="flex items-center gap-3">
+                    <div class="text-primary">
+                        <span class="material-symbols-outlined text-4xl">restaurant_menu</span>
+                    </div>
+                    <h1 class="text-2xl font-bold tracking-tight text-slate-100 uppercase">Atelier 27</h1>
+                </div>
+                <div class="hidden md:flex flex-1 max-w-md mx-8">
+                    <div class="relative w-full">
+                        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-primary">search</span>
+                        <input class="w-full bg-surface-dark border-none rounded-lg py-2 pl-10 pr-4 text-slate-100 placeholder:text-slate-500 focus:ring-1 focus:ring-primary" placeholder="Buscar en nuestro exquisito menú..." type="text" />
+                    </div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <button class="p-2 text-slate-100 hover:text-primary transition-colors">
+                        <span class="material-symbols-outlined">person</span>
+                    </button>
+                    <div class="h-10 w-10 rounded-full bg-primary/20 border border-primary/30 flex items-center justify-center overflow-hidden">
+                        <div class="w-full h-full bg-cover bg-center" data-alt="User profile avatar placeholder" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDbEm1poU6PbIHBNrmxP3ZKfsLr40_74vFUFLXqddgrd9zeSQLQLZ8bvC2U2HZEHJggFdQd3hQ4nPrsnE_q9_VQMh0R33-R6SB9qyJMekQwcVD5shvlefQPit4VtsTd7F8ZnKDGfM88jkU0KU85kHEr4ehxHVBZRHpMV9DxZdcBGFVXZd6IfbDqOYqOW2cklGZmjo3ZKMcE7xi2RyG648oPQCeWjcglhw30HU11HbI_G2zNJ1DiI4vFbKP1XwDoG6zFPuq53bSVu-56')"></div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <main class="flex-1 w-full max-w-[1200px] mx-auto px-6 md:px-10 py-8">
+            <!-- Category Navigation -->
+            <div class="flex gap-3 overflow-x-auto pb-6 no-scrollbar">
+                <button class="flex items-center gap-2 whitespace-nowrap px-6 py-2 rounded-full bg-primary text-white font-medium shadow-lg shadow-primary/20"><span class="material-symbols-outlined text-sm">star</span>Especiales</button>
+                <button class="flex items-center gap-2 whitespace-nowrap px-6 py-2 rounded-full bg-surface-dark text-slate-300 hover:bg-primary/20 hover:text-primary transition-all border border-border-dark">
+                    Entradas
+                </button>
+                <button class="flex items-center gap-2 whitespace-nowrap px-6 py-2 rounded-full bg-surface-dark text-slate-300 hover:bg-primary/20 hover:text-primary transition-all border border-border-dark">
+                    Platos Fuertes
+                </button>
+                <button class="flex items-center gap-2 whitespace-nowrap px-6 py-2 rounded-full bg-surface-dark text-slate-300 hover:bg-primary/20 hover:text-primary transition-all border border-border-dark">
+                    Postres
+                </button>
+                <button class="flex items-center gap-2 whitespace-nowrap px-6 py-2 rounded-full bg-surface-dark text-slate-300 hover:bg-primary/20 hover:text-primary transition-all border border-border-dark">
+                    Bebidas
+                </button>
+                <button class="flex items-center gap-2 whitespace-nowrap px-6 py-2 rounded-full bg-surface-dark text-slate-300 hover:bg-primary/20 hover:text-primary transition-all border border-border-dark">
+                    Vinos
+                </button>
+            </div>
+            <!-- Section Title -->
+            <div class="flex items-end justify-between mb-8">
+                <div>
+                    <h2 class="text-3xl font-bold text-slate-100">Selección de la Casa</h2>
+                    <p class="text-primary/80 font-medium">Curada por nuestro Chef de Cocine</p>
+                </div>
+                <div class="hidden sm:flex gap-2">
+                    <button class="p-2 rounded-lg bg-surface-dark text-slate-400 border border-border-dark">
+                        <span class="material-symbols-outlined">tune</span>
+                    </button>
+                </div>
+            </div>
+            <!-- Menu Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 pb-24">
+                <!-- Item 1 -->
+                <div class="group flex flex-col bg-surface-dark/50 rounded-xl overflow-hidden border border-border-dark hover:border-primary/50 transition-all">
+                    <div class="relative aspect-[4/3] overflow-hidden">
+                        <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="Gourmet Tuna Tartare with avocado and edible flowers" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBjGVbPuRwP96ZAYggb3LHl9VTn3SX-5vGSNt9Y0iU1n_Ww6QUSPg8wmz6AWHx4nMU7td07W6ZgB_XZ5YDchmmMAyCNGvYXQ4CczD0wMkypKflasUzz5op-QBe1JJJkFd9plld7XRVRvOO-RvpR2dNaz-C-g-rElgbo19ML5B8174ATfZ-HEvsuSVLkLBJcZzcOzBc-vonLVZojATTw-K5viMEAZZa7gOEi6m3Cf69f_Mhyo1zAfSlPFRxA4DVJxKlAEjqj0YLXtKt7')"></div>
+                        <div class="absolute top-3 right-3 bg-background-dark/80 backdrop-blur-md px-3 py-1 rounded-full text-primary font-bold">
+                            €18.00
+                        </div>
+                    </div>
+                    <div class="p-5 flex flex-col flex-1">
+                        <h3 class="text-xl font-bold text-slate-100 mb-2">Tuna Tartare</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed mb-4 flex-1">Atún rojo fresco, picado a mano y sazonado con ralladura de cítricos, servido sobre una base de mousse de aguacate cremoso.</p>
+                        <button class="w-full py-2 bg-primary/10 hover:bg-primary text-primary hover:text-white rounded-lg transition-colors font-semibold flex items-center justify-center gap-2"><span class="material-symbols-outlined text-sm">add_shopping_cart</span>Añadir al Pedido</button>
+                    </div>
+                </div>
+                <!-- Item 2 -->
+                <div class="group flex flex-col bg-surface-dark/50 rounded-xl overflow-hidden border border-border-dark hover:border-primary/50 transition-all">
+                    <div class="relative aspect-[4/3] overflow-hidden">
+                        <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="Elegant Beef Wellington with golden puff pastry" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDH8MDydMxclg4n9TDBzRNTw-6QrebJkOXmipfaFUcN9kvvBaE2ADYz6xngn4volNomlFYz3-HEcwl-8xYUmECAS_c3-wSbp3eIic76nwxAJqVr43ZUQRfbz9Hu8Aw2vLJJpbkLU3Lv9Bea2IhzXJY1gOzkKZhxUHmwpcO_T-O8_-Ndx9GeibQhUbCuGEkSMca7SV1XxxqMfqPHKUaDecnUl1gIQXNBUpECcqmFdIxl6z7J-nLAs8gkaE_8Ngyn-76ir8G3ZMpfRUR-')"></div>
+                        <div class="absolute top-3 right-3 bg-background-dark/80 backdrop-blur-md px-3 py-1 rounded-full text-primary font-bold">
+                            €34.00
+                        </div>
+                    </div>
+                    <div class="p-5 flex flex-col flex-1">
+                        <h3 class="text-xl font-bold text-slate-100 mb-2">Beef Wellington</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed mb-4 flex-1">Filete de res premium envuelto en una duxelles de champiñones silvestres y hojaldre dorado y crujiente.</p>
+                        <button class="w-full py-2 bg-primary/10 hover:bg-primary text-primary hover:text-white rounded-lg transition-colors font-semibold flex items-center justify-center gap-2"><span class="material-symbols-outlined text-sm">add_shopping_cart</span>Añadir al Pedido</button>
+                    </div>
+                </div>
+                <!-- Item 3 -->
+                <div class="group flex flex-col bg-surface-dark/50 rounded-xl overflow-hidden border border-border-dark hover:border-primary/50 transition-all">
+                    <div class="relative aspect-[4/3] overflow-hidden">
+                        <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="Creamy Truffle Risotto with shaved black truffles" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDqwi1etpRRsibYsamUKPTCb4VtQVYGd0Ky00f7dYRzo4gtn7W4dH9bMmnNAS8o1teQV2nIkGWz6qKz6gBLKJAkqqqhRfuNSBjpiLSyz99AsEBkXdGHWjdf7nI1532g0oNnmLBhYZbD0hpXwxorAmRWDdFz2bvuyRl483G8IDM9KYn4iUuED_loW50DpHv5msHlXrLZfvvmqAA1FzE1kM0CdnidUhCkKqwFi2tSiJhZTWtF-cVl_7HPDjmQXIOgEJJPhpHv8ZPQ8Eie')"></div>
+                        <div class="absolute top-3 right-3 bg-background-dark/80 backdrop-blur-md px-3 py-1 rounded-full text-primary font-bold">
+                            €26.00
+                        </div>
+                    </div>
+                    <div class="p-5 flex flex-col flex-1">
+                        <h3 class="text-xl font-bold text-slate-100 mb-2">Truffle Risotto</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed mb-4 flex-1">Arroz carnaroli envejecido cocinado lentamente con queso parmesano Reggiano y terminado con láminas de trufa negra fresca.</p>
+                        <button class="w-full py-2 bg-primary/10 hover:bg-primary text-primary hover:text-white rounded-lg transition-colors font-semibold flex items-center justify-center gap-2"><span class="material-symbols-outlined text-sm">add_shopping_cart</span>Añadir al Pedido</button>
+                    </div>
+                </div>
+                <!-- Item 4 -->
+                <div class="group flex flex-col bg-surface-dark/50 rounded-xl overflow-hidden border border-border-dark hover:border-primary/50 transition-all">
+                    <div class="relative aspect-[4/3] overflow-hidden">
+                        <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="Roasted Sea Bass with lemon butter and herbs" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDyFZEl9ZWIYsdVZC7JP5Ro6TjMPw41Fcqcao90W9V_NuO0LVKciERS_o5spte13laa-nKyBW42bs2eW6yannUg9FBNhnZ0aItzqYeWkswCl4p-rIRhq-ces6-h5ZeMs2yLKoENRdIpFUs5LxFD1shbW2oWgUcYFjsrCtTASuRF9JbAnMgLp-Ijt6ZnS1B74baPFUqAvhOFr7zpWVlcGDCyFZKIcXopOfsBooXVFykmfye4vavX8Ch-YwR0HVqdzzX0ES_ih17pIgNe')"></div>
+                        <div class="absolute top-3 right-3 bg-background-dark/80 backdrop-blur-md px-3 py-1 rounded-full text-primary font-bold">
+                            €28.00
+                        </div>
+                    </div>
+                    <div class="p-5 flex flex-col flex-1">
+                        <h3 class="text-xl font-bold text-slate-100 mb-2">Roasted Sea Bass</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed mb-4 flex-1">Lubina de piel crujiente servida con una delicada salsa de mantequilla de limón y alcaparras, salteada con verduras de primavera.</p>
+                        <button class="w-full py-2 bg-primary/10 hover:bg-primary text-primary hover:text-white rounded-lg transition-colors font-semibold flex items-center justify-center gap-2"><span class="material-symbols-outlined text-sm">add_shopping_cart</span>Añadir al Pedido</button>
+                    </div>
+                </div>
+                <!-- Item 5 -->
+                <div class="group flex flex-col bg-surface-dark/50 rounded-xl overflow-hidden border border-border-dark hover:border-primary/50 transition-all">
+                    <div class="relative aspect-[4/3] overflow-hidden">
+                        <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="Decadent chocolate fondant with melting center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBJsVaHJ0eUTM5np6l121cQSTG9kyNsz5OwxPNNOQ180LlfdroHtUjGwKOJch5dYeaEMJw-RmMN0qsphn_R64dXUHuWTRc9lrGHbmgJmko49sJaOJ4i6TpRJLhCRJTFJekJml6CLV8GMupnvJjj2X5aFTJDs8lJUyAc224PuYFLKIcj4Jtv3TaC8Z5MyyUKcKTHHqd2Pn7DMd_YX9njCNm74ev3jWuqHMrvv0Kn0xgpQ1zvNPCDOh7h82YB3z7uLqqpbCt8dtD4qGR9')"></div>
+                        <div class="absolute top-3 right-3 bg-background-dark/80 backdrop-blur-md px-3 py-1 rounded-full text-primary font-bold">
+                            €12.00
+                        </div>
+                    </div>
+                    <div class="p-5 flex flex-col flex-1">
+                        <h3 class="text-xl font-bold text-slate-100 mb-2">Chocolate Fondant</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed mb-4 flex-1">Pastel de lava de cacao oscuro al 70% con un centro fundido cálido, servido con helado de vainilla de Madagascar.</p>
+                        <button class="w-full py-2 bg-primary/10 hover:bg-primary text-primary hover:text-white rounded-lg transition-colors font-semibold flex items-center justify-center gap-2"><span class="material-symbols-outlined text-sm">add_shopping_cart</span>Añadir al Pedido</button>
+                    </div>
+                </div>
+                <!-- Item 6 -->
+                <div class="group flex flex-col bg-surface-dark/50 rounded-xl overflow-hidden border border-border-dark hover:border-primary/50 transition-all">
+                    <div class="relative aspect-[4/3] overflow-hidden">
+                        <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="Glass of premium Red Wine from a cellar" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAb0L5inIo8eZizDJ7ycxjEwapZWA3E5pQMBybou7yiivMHp8Vnd6TmK5Tdi5zUIYjWI74Q5Jm1MUImXK9B-bGndNyq8VsuY-ImWsvR6Nu4wHpyqfiiwoVAEkr3-q72dCAYOwqJMIsD-7mggpDHgN3ovdbtopxSHQgtoNDs1l0xPqAWMvrNz1E5tfqK1mOwBNlsK0wJl-Df_fnFptmtTbREIMcYcic0LWNAdj4I3pBWiXsOpN4VLtAjsGsibrZsy-dbVV33FzfM-NHC')"></div>
+                        <div class="absolute top-3 right-3 bg-background-dark/80 backdrop-blur-md px-3 py-1 rounded-full text-primary font-bold">
+                            €14.00
+                        </div>
+                    </div>
+                    <div class="p-5 flex flex-col flex-1">
+                        <h3 class="text-xl font-bold text-slate-100 mb-2">Vintage Merlot</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed mb-4 flex-1">Un tinto de cuerpo completo con notas de cereza negra y cedro. Seleccionado de nuestra reserva privada.</p>
+                        <button class="w-full py-2 bg-primary/10 hover:bg-primary text-primary hover:text-white rounded-lg transition-colors font-semibold flex items-center justify-center gap-2"><span class="material-symbols-outlined text-sm">add_shopping_cart</span>Añadir al Pedido</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <!-- Floating View Cart Button -->
+        <div class="fixed bottom-8 left-1/2 -translate-x-1/2 z-50">
+            <button class="flex items-center gap-4 bg-primary px-8 py-4 rounded-full shadow-2xl shadow-primary/40 hover:scale-105 active:scale-95 transition-all text-white">
+                <div class="relative">
+                    <span class="material-symbols-outlined text-2xl">shopping_bag</span>
+                    <span class="absolute -top-2 -right-2 bg-white text-primary text-[10px] font-bold h-5 w-5 rounded-full flex items-center justify-center">3</span>
+                </div>
+                <div class="text-left">
+                    <p class="text-xs opacity-80 uppercase font-bold tracking-widest">TU PEDIDO</p>
+                    <p class="text-lg font-bold leading-tight">Ver Carrito • €78.00</p>
+                </div>
+            </button>
+        </div>
+        <!-- Navigation Overlay / Mini-Sidebar indicator for mobile -->
+        <div class="fixed right-6 bottom-8 z-50 flex flex-col gap-4">
+            <button class="size-12 rounded-full bg-surface-dark border border-border-dark flex items-center justify-center text-primary shadow-xl">
+                <span class="material-symbols-outlined">support_agent</span>
+            </button>
+            <button class="size-12 rounded-full bg-surface-dark border border-border-dark flex items-center justify-center text-primary shadow-xl">
+                <span class="material-symbols-outlined">info</span>
+            </button>
+        </div>
+    </div>
+    <style>
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>

@@ -1,0 +1,36 @@
+﻿<div class="bg-background-light dark:bg-background-dark border border-primary/20 rounded-xl shadow-xl overflow-hidden">
+    <div id="modalEditar" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0a0805]/80 backdrop-blur-sm hidden">
+        <div class="bg-background-light dark:bg-[#1a160d] w-full max-w-2xl rounded-2xl border border-primary/20 shadow-2xl overflow-hidden">
+
+            <!-- Header -->
+            <div class="px-8 py-6 border-b border-primary/10 flex justify-between">
+                <h2 class="text-2xl font-black text-primary">Editar Categoría</h2>
+                <button id="cerrarEditar">X</button>
+            </div>
+
+            <!-- Body -->
+            <div class="p-8">
+                <form asp-action="Editar" method="post">
+
+                    <!-- Código (NO editable) -->
+                    <div class="mb-4">
+                        <label>Código</label>
+                        <input id="editCodigo" name="CodigoCategoria" readonly class="w-full bg-slate-100 dark:bg-primary/5 border border-primary/20 rounded-xl px-4 py-3 text-sm focus:ring-primary focus:border-primary transition-all outline-none cursor-not-allowed"  />
+                    </div>
+
+                    <!-- Descripción -->
+                    <div class="mb-4">
+                        <label>Descripción</label>
+                        <textarea id="editDescripcion" name="Descripcion" class="w-full bg-slate-100 dark:bg-primary/5 border border-primary/20 rounded-xl px-4 py-3 text-sm focus:ring-primary focus:border-primary transition-all outline-none"></textarea>
+                    </div>
+
+                    <div class="flex justify-end gap-2">
+                        <button type="button" id="cancelarEditar" class="bg-gray-400 px-4 py-2 rounded">Cancelar</button>
+                        <button type="submit" class="bg-primary text-white px-4 py-2 rounded">Guardar</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

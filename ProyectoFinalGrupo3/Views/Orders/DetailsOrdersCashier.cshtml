@@ -1,0 +1,185 @@
+@{
+    Layout = "~/Views/Shared/_CustomLayout.cshtml";
+    ViewData["Title"] = "DetailsOrdersCashier";
+}
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <!-- Top Header -->
+            <header class="h-16 bg-white dark:bg-surface-dark border-b border-slate-200 dark:border-border-dark flex items-center justify-between px-8">
+                <div class="flex items-center gap-4 flex-1">
+                    <div class="relative w-96">
+                        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+                        <input class="w-full bg-slate-100 dark:bg-background-dark border-none rounded-lg pl-10 pr-4 py-2 focus:ring-2 focus:ring-primary text-sm" placeholder="Buscar mesa o cliente..." type="text" />
+                    </div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="text-right">
+                        <p class="text-sm font-semibold">Carlos Méndez</p>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">Cajero de Turno</p>
+                    </div>
+                    <div class="size-10 rounded-full bg-primary/20 flex items-center justify-center border border-primary/30 overflow-hidden">
+                        <img alt="Avatar Cajero" class="w-full h-full object-cover" data-alt="Portrait of a smiling cashier staff member" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDdh5tKqoHpwX78DFvTjsjNMcnDqV6xUNTSObCeMgxFEWIyBC5bFfPoR_4oEM3Vc-46nycTE0yJ_mwDpQ7uiC1NHiufSfE_oh5s9oym5hs5Egdhn5xf-FVLyFskAaqp4w2pJkl9S7_hX6Bdf0YTQZ64xxZn-jEAKduXdlWBHChZa3bPYiA5IfA0Ap6jOYvbjhi4mlHO74jNzl2CYTJ_za4BtRsP6x-RF801O5aM--kRIa7Fk4XOurFTSbktXZdNFU_xEL9WlfeH4ldU" />
+                    </div>
+                </div>
+            </header>
+            <!-- Dashboard Content Area -->
+            <div class="flex-1 flex overflow-hidden">
+                <!-- Orders List -->
+                <section class="flex-1 overflow-y-auto p-8">
+                    <div class="flex items-center justify-between mb-8">
+                        <div>
+                            <h2 class="text-3xl font-bold tracking-tight">Pedidos Listos para Cobro</h2>
+                            <p class="text-slate-500 dark:text-slate-400">Seleccione una orden para procesar el pago</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <span class="inline-flex items-center px-3 py-1 rounded-full bg-green-100 dark:bg-green-500/20 text-green-700 dark:text-green-400 text-xs font-bold">
+                                8 Mesas Activas
+                            </span>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                        <!-- Table Card -->
+                        <div class="bg-white dark:bg-surface-dark p-6 rounded-xl border-2 border-primary shadow-lg shadow-primary/5 cursor-pointer hover:scale-[1.02] transition-transform">
+                            <div class="flex justify-between items-start mb-4">
+                                <div class="size-12 bg-primary rounded-lg flex items-center justify-center text-white font-bold text-xl">
+                                    05
+                                </div>
+                                <span class="text-xs font-bold text-primary uppercase bg-primary/10 px-2 py-1 rounded">Listo para Cobrar</span>
+                            </div>
+                            <h3 class="font-bold text-lg mb-1">Juan Pérez</h3>
+                            <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">4 Comensales • 45 min transcurridos</p>
+                            <div class="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-border-dark">
+                                <span class="text-2xl font-bold text-primary">$85.50</span>
+                                <button class="bg-primary text-white px-4 py-2 rounded-lg font-bold text-sm flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-sm">payments</span>
+                                    Procesar
+                                </button>
+                            </div>
+                        </div>
+                        <!-- Table Card -->
+                        <div class="bg-white dark:bg-surface-dark p-6 rounded-xl border border-slate-200 dark:border-border-dark hover:border-primary/50 transition-colors cursor-pointer group">
+                            <div class="flex justify-between items-start mb-4">
+                                <div class="size-12 bg-slate-200 dark:bg-background-dark rounded-lg flex items-center justify-center font-bold text-xl group-hover:bg-primary/20 transition-colors">
+                                    12
+                                </div>
+                                <span class="text-xs font-bold text-slate-400 uppercase border border-slate-200 dark:border-border-dark px-2 py-1 rounded">Esperando Cuenta</span>
+                            </div>
+                            <h3 class="font-bold text-lg mb-1">Cliente General</h3>
+                            <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">2 Comensales • 1h 10min</p>
+                            <div class="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-border-dark">
+                                <span class="text-2xl font-bold">$120.00</span>
+                                <button class="bg-slate-100 dark:bg-background-dark text-slate-600 dark:text-slate-300 px-4 py-2 rounded-lg font-bold text-sm">
+                                    Detalles
+                                </button>
+                            </div>
+                        </div>
+                        <!-- Table Card -->
+                        <div class="bg-white dark:bg-surface-dark p-6 rounded-xl border border-slate-200 dark:border-border-dark hover:border-primary/50 transition-colors cursor-pointer">
+                            <div class="flex justify-between items-start mb-4">
+                                <div class="size-12 bg-slate-200 dark:bg-background-dark rounded-lg flex items-center justify-center font-bold text-xl">
+                                    08
+                                </div>
+                                <span class="text-xs font-bold text-slate-400 uppercase border border-slate-200 dark:border-border-dark px-2 py-1 rounded">Pendiente</span>
+                            </div>
+                            <h3 class="font-bold text-lg mb-1">Maria Sánchez</h3>
+                            <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">1 Comensal • 25 min</p>
+                            <div class="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-border-dark">
+                                <span class="text-2xl font-bold">$45.20</span>
+                                <button class="bg-slate-100 dark:bg-background-dark text-slate-600 dark:text-slate-300 px-4 py-2 rounded-lg font-bold text-sm">
+                                    Detalles
+                                </button>
+                            </div>
+                        </div>
+                        <!-- Table Card -->
+                        <div class="bg-white dark:bg-surface-dark p-6 rounded-xl border border-slate-200 dark:border-border-dark hover:border-primary/50 transition-colors cursor-pointer">
+                            <div class="flex justify-between items-start mb-4">
+                                <div class="size-12 bg-slate-200 dark:bg-background-dark rounded-lg flex items-center justify-center font-bold text-xl">
+                                    03
+                                </div>
+                                <span class="text-xs font-bold text-slate-400 uppercase border border-slate-200 dark:border-border-dark px-2 py-1 rounded">Pendiente</span>
+                            </div>
+                            <h3 class="font-bold text-lg mb-1">Sin Nombre</h3>
+                            <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">3 Comensales • 15 min</p>
+                            <div class="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-border-dark">
+                                <span class="text-2xl font-bold">$62.00</span>
+                                <button class="bg-slate-100 dark:bg-background-dark text-slate-600 dark:text-slate-300 px-4 py-2 rounded-lg font-bold text-sm">
+                                    Detalles
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- Billing Panel (Side Modal style) -->
+                <aside class="w-[450px] bg-white dark:bg-surface-dark border-l border-slate-200 dark:border-border-dark flex flex-col shadow-2xl">
+                    <div class="p-6 border-b border-slate-200 dark:border-border-dark flex items-center justify-between">
+                        <div>
+                            <h3 class="font-bold text-xl">Detalle de Cobro</h3>
+                            <p class="text-sm text-primary font-medium">Mesa 05 - Juan Pérez</p>
+                        </div>
+                        <button class="p-2 hover:bg-slate-100 dark:hover:bg-background-dark rounded-full">
+                            <span class="material-symbols-outlined">close</span>
+                        </button>
+                    </div>
+                    <div class="flex-1 overflow-y-auto p-6 space-y-4">
+                        <div class="space-y-3">
+                            <div class="flex justify-between text-sm">
+                                <span class="text-slate-600 dark:text-slate-400">2x Filete de Res al Vino</span>
+                                <span class="font-medium">$48.00</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-slate-600 dark:text-slate-400">1x Ensalada Cesar Especial</span>
+                                <span class="font-medium">$12.50</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-slate-600 dark:text-slate-400">3x Copa de Vino Tinto Reserva</span>
+                                <span class="font-medium">$21.00</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-slate-600 dark:text-slate-400">1x Postre: Volcán de Chocolate</span>
+                                <span class="font-medium">$4.00</span>
+                            </div>
+                        </div>
+                        <div class="pt-6 border-t border-slate-100 dark:border-border-dark space-y-2">
+                            <div class="flex justify-between text-sm">
+                                <span class="text-slate-500">Subtotal</span>
+                                <span>$85.50</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-slate-500">Impuestos (10%)</span>
+                                <span>$8.55</span>
+                            </div>
+                            <div class="flex justify-between text-xl font-bold text-primary pt-2">
+                                <span>TOTAL FINAL</span>
+                                <span>$94.05</span>
+                            </div>
+                        </div>
+                        <div class="pt-6">
+                            <p class="text-xs font-bold uppercase text-slate-400 mb-3 tracking-widest">Método de Pago</p>
+                            <div class="grid grid-cols-3 gap-2">
+                                <button class="flex flex-col items-center justify-center p-3 rounded-lg border-2 border-primary bg-primary/5 text-primary">
+                                    <span class="material-symbols-outlined mb-1">payments</span>
+                                    <span class="text-[10px] font-bold">EFECTIVO</span>
+                                </button>
+                                <button class="flex flex-col items-center justify-center p-3 rounded-lg border border-slate-200 dark:border-border-dark hover:border-primary transition-colors">
+                                    <span class="material-symbols-outlined mb-1">credit_card</span>
+                                    <span class="text-[10px] font-bold">TARJETA</span>
+                                </button>
+                                <button class="flex flex-col items-center justify-center p-3 rounded-lg border border-slate-200 dark:border-border-dark hover:border-primary transition-colors">
+                                    <span class="material-symbols-outlined mb-1">account_balance</span>
+                                    <span class="text-[10px] font-bold">TRANSF.</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6 bg-slate-50 dark:bg-background-dark/30 space-y-3">
+                        <button class="w-full flex items-center justify-center gap-2 py-3 border border-primary text-primary rounded-lg font-bold hover:bg-primary/5 transition-colors">
+                            <span class="material-symbols-outlined">picture_as_pdf</span>
+                            Generar Factura (PDF)
+                        </button>
+                        <button class="w-full flex items-center justify-center gap-2 py-4 bg-primary text-white rounded-lg font-bold text-lg shadow-lg shadow-primary/20 hover:bg-primary/90 active:scale-95 transition-all">
+                            <span class="material-symbols-outlined">check_circle</span>
+                            FINALIZAR PAGO
+                        </button>
+                    </div>
+                </aside>
+            </div>
+        </div>

@@ -1,0 +1,203 @@
+@{
+    Layout = "~/Views/Shared/_CustomLayoutPublic.cshtml";
+    ViewData["Title"] = "Login";
+}
+
+    <div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+        <!-- Top Navigation Bar -->
+        <header class="sticky top-0 z-50 w-full border-b border-primary/20 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md px-6 lg:px-20 py-4">
+            <div class="max-w-7xl mx-auto flex items-center justify-between">
+                <div class="flex items-center gap-3 text-primary">
+                    <span class="material-symbols-outlined text-3xl">restaurant</span>
+                    <h1 class="text-xl font-bold tracking-tight uppercase">Atelier 27</h1>
+                </div>
+                <nav class="hidden md:flex items-center gap-10">
+                    <a class="text-sm font-medium hover:text-primary transition-colors"
+                       asp-controller="Menu" asp-action="Index">
+                        <span>Menu</span>
+                    </a>
+                    <a class="text-sm font-medium hover:text-primary transition-colors" href="#">Reservas</a>
+                    <a class="text-sm font-medium hover:text-primary transition-colors" href="#">Eventos</a>
+                </nav>
+                <div class="flex items-center gap-4">
+                <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-text-muted hover:bg-neutral-gold/20 hover:text-primary transition-all"
+                         asp-controller="Dashboard" asp-action="Index">
+                        <span class="material-symbols-outlined">person</span>
+                        <span>Mi perfil</span>
+                    </a>
+                </div>
+            </div>
+        </header>
+        <main class="flex-1">
+            <!-- Hero Section -->
+            <section class="relative h-[80vh] w-full flex items-center justify-center px-4 overflow-hidden">
+                <div class="absolute inset-0 z-0">
+                    <div class="absolute inset-0 bg-gradient-to-t from-background-dark via-background-dark/60 to-transparent z-10"></div>
+                    <img alt="Plato gourmet" class="w-full h-full object-cover" data-alt="Primer plano artístico de un plato de alta cocina minimalista" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCPrymoYCtNOczJVOZIM9G3nan8udhgR2F1z2BeXK_I2m_a8h3XL-9YhLcyHrOwVjVTPx1YQDWbHz0GS5Kcj5QrGNdYGVSjpSmBqQfUYZIEGqV4_Xf8vuLsFsnklgz9KnZ7D4wMyED5SZvLvc19Z5lD_9_higDgoc5SjSN5w5J0Vm0PXMzSYgPNQHQjKiogIi8ZbSg1sQmDpPccSj2TdyTroTG6JSwovbLNDrwW0Hz1HPV0ITdbLKoG6j9b4WsuYOx-wFxFUYXACCGD" />
+                </div>
+                <div class="relative z-20 text-center max-w-4xl mx-auto flex flex-col items-center gap-8">
+                    <div class="space-y-4">
+                        <h2 class="text-4xl md:text-7xl font-black leading-tight tracking-tight text-white">
+                            El arte de la gastronomía <br /><span class="text-primary">en cada bocado</span>
+                        </h2>
+                        <p class="text-lg md:text-xl font-light text-slate-200 max-w-2xl mx-auto">
+                            Una experiencia culinaria sofisticada donde la tradición se encuentra con la vanguardia en el corazón de la ciudad.
+                        </p>
+                    </div>
+                    <button class="bg-primary hover:bg-primary/90 text-white px-8 py-4 rounded-lg font-bold text-lg transition-transform hover:scale-105 active:scale-95 shadow-xl shadow-primary/20">
+                        Explorar el Menú
+                    </button>
+                </div>
+            </section>
+            <!-- Featured Dishes Section -->
+            <section class="py-20 px-6 lg:px-20 max-w-7xl mx-auto">
+                <div class="flex justify-between items-end mb-12">
+                    <div>
+                        <span class="text-primary font-bold uppercase tracking-widest text-sm">Selección del Chef</span>
+                        <h3 class="text-3xl font-bold mt-2">Nuestras Sugerencias</h3>
+                    </div>
+                    <a class="text-primary font-semibold flex items-center gap-2 hover:underline" href="#">
+                        Ver todo el menú <span class="material-symbols-outlined">arrow_forward</span>
+                    </a>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Card 1 -->
+                    <div class="group bg-slate-100 dark:bg-primary/5 rounded-xl overflow-hidden border border-transparent hover:border-primary/30 transition-all">
+                        <div class="h-64 overflow-hidden">
+                            <img alt="Risotto de Trufa Negra" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="Plato de risotto cremoso decorado con láminas de trufa negra" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB80nz-6rcd5PWlDo8muHjzMUpjWl8kfhLkl8u-rDzOzxczG6V7x3cb4kEeSjzaMvB-adgWhdyQo8S0lncv2omLz_8XzqXeUjU852RQANFWDu51fdgBj3fwvUAgu3tuxoG6Jg3vt7uCjBtDrBduGY5nhWHajZi6o4VCV02ocfjJZ01VRfF7vu00O0nPZtC6DN5X6zBYjZJ7Ae_tiPNbFKyWmVyjDau1G3nEZkV6twChFfalCsqt9NFniv1R_Qzf2jhE9QSpfC0EQxpk" />
+                        </div>
+                        <div class="p-6">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="text-xl font-bold group-hover:text-primary transition-colors">Risotto de Trufa Negra</h4>
+                                <span class="text-primary font-bold">32€</span>
+                            </div>
+                            <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
+                                Arroz cremoso Carnaroli con láminas de trufa negra fresca, parmesano reggiano de 24 meses y esencia de bosque.
+                            </p>
+                        </div>
+                    </div>
+                    <!-- Card 2 -->
+                    <div class="group bg-slate-100 dark:bg-primary/5 rounded-xl overflow-hidden border border-transparent hover:border-primary/30 transition-all">
+                        <div class="h-64 overflow-hidden">
+                            <img alt="Solomillo de Aliste" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="Solomillo de carne roja perfectamente cocinado con reducción de vino" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDwC_B512roEDIdY2yvJh2gTiMndG9jubQdmZjctlVRqwbepBl8WsasHJ8tZedgCnuCVObSAif8b_Xs7QOwx9Uuz8HdUvUBOlHdxROcx9ISkOOipdGOTjVnnOPhNgeVnQ097LGEuzP1p-ZBIDt4JtI-BEw7opDnmvZSN2r-sllrxkkTlcC2M75ca-1ULkozJfGe6Td7d3FQBwD7HpML0ZMa0bMXDd1FMXGbGHNIxjF1eRRT6F2e7tr_9hPOBBb_tmKcgqMYv4FeLpfH" />
+                        </div>
+                        <div class="p-6">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="text-xl font-bold group-hover:text-primary transition-colors">Solomillo de Aliste</h4>
+                                <span class="text-primary font-bold">38€</span>
+                            </div>
+                            <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
+                                Carne madurada durante 45 días, acompañada de reducción de vino tinto Ribera del Duero y puré de chalotas.
+                            </p>
+                        </div>
+                    </div>
+                    <!-- Card 3 -->
+                    <div class="group bg-slate-100 dark:bg-primary/5 rounded-xl overflow-hidden border border-transparent hover:border-primary/30 transition-all">
+                        <div class="h-64 overflow-hidden">
+                            <img alt="Lubina Salvaje" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="Filete de lubina salvaje con piel crujiente y vegetales de temporada" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCIigsVT41On-QmbR1KiQT197I53s3uR2tlNApBc2oi8jgoqy08JfEKXxy2Sp2gpcLPfXoq3ZBN8TmbPED-LY-g_rUQgeYxsA2VI_LwymbHD1AdbbFmdX5GFJm7MTfDBQm1FHbO14AtZV9lxczqvOTNSMK8IabNVQez8tYGzG2RyhYSCNAdgcQXbuY5sb11X_i6swwc3IVykcj0va2qpbJXWlKKzkdcg40ZMjB2R7oPVw8-jMS6RV6BDay4MMFYjWB7ffq5YrX_EO1T" />
+                        </div>
+                        <div class="p-6">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="text-xl font-bold group-hover:text-primary transition-colors">Lubina Salvaje</h4>
+                                <span class="text-primary font-bold">35€</span>
+                            </div>
+                            <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
+                                Pesca del día a la brasa con emulsión de cítricos, espárragos trigueros y perlas de tapioca al hinojo.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Menu Categories -->
+            <section class="py-20 bg-primary/5 border-y border-primary/10">
+                <div class="max-w-7xl mx-auto px-6 lg:px-20">
+                    <div class="text-center mb-16">
+                        <h3 class="text-3xl font-bold">Explora por Categoría</h3>
+                        <p class="text-slate-500 dark:text-slate-400 mt-2">Descubre los sabores que hemos diseñado para ti</p>
+                    </div>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                        <div class="flex flex-col items-center gap-4 p-8 rounded-xl bg-background-light dark:bg-background-dark border border-primary/20 hover:bg-primary hover:text-white transition-all cursor-pointer group">
+                            <span class="material-symbols-outlined text-4xl text-primary group-hover:text-white">skillet</span>
+                            <span class="font-bold tracking-wide uppercase text-sm">Entradas</span>
+                        </div>
+                        <div class="flex flex-col items-center gap-4 p-8 rounded-xl bg-background-light dark:bg-background-dark border border-primary/20 hover:bg-primary hover:text-white transition-all cursor-pointer group">
+                            <span class="material-symbols-outlined text-4xl text-primary group-hover:text-white">restaurant_menu</span>
+                            <span class="font-bold tracking-wide uppercase text-sm">Platos Fuertes</span>
+                        </div>
+                        <div class="flex flex-col items-center gap-4 p-8 rounded-xl bg-background-light dark:bg-background-dark border border-primary/20 hover:bg-primary hover:text-white transition-all cursor-pointer group">
+                            <span class="material-symbols-outlined text-4xl text-primary group-hover:text-white">icecream</span>
+                            <span class="font-bold tracking-wide uppercase text-sm">Postres</span>
+                        </div>
+                        <div class="flex flex-col items-center gap-4 p-8 rounded-xl bg-background-light dark:bg-background-dark border border-primary/20 hover:bg-primary hover:text-white transition-all cursor-pointer group">
+                            <span class="material-symbols-outlined text-4xl text-primary group-hover:text-white">wine_bar</span>
+                            <span class="font-bold tracking-wide uppercase text-sm">Cava y Vinos</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+        <!-- Footer -->
+        <footer class="bg-slate-950 text-slate-400 py-20 px-6 lg:px-20">
+            <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
+                <div class="space-y-6">
+                    <div class="flex items-center gap-3 text-primary">
+                        <span class="material-symbols-outlined text-3xl">restaurant</span>
+                        <h2 class="text-xl font-bold tracking-tight uppercase">Atelier 27</h2>
+                    </div>
+                    <p class="text-sm leading-relaxed">
+                        Comprometidos con la excelencia gastronómica, seleccionando los mejores ingredientes locales para crear experiencias inolvidables.
+                    </p>
+                    <div class="flex gap-4">
+                        <a class="hover:text-primary transition-colors" href="#">
+                            <span class="material-symbols-outlined">public</span>
+                        </a>
+                        <a class="hover:text-primary transition-colors" href="#">
+                            <span class="material-symbols-outlined">camera</span>
+                        </a>
+                        <a class="hover:text-primary transition-colors" href="#">
+                            <span class="material-symbols-outlined">share</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="space-y-6">
+                    <h4 class="text-white font-bold uppercase tracking-wider text-sm">Horario</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li class="flex justify-between"><span>Martes - Jueves</span> <span>13:30 - 23:00</span></li>
+                        <li class="flex justify-between"><span>Viernes - Sábado</span> <span>13:30 - 00:00</span></li>
+                        <li class="flex justify-between"><span>Domingo</span> <span>13:30 - 17:00</span></li>
+                        <li class="flex justify-between text-primary"><span>Lunes</span> <span>Cerrado</span></li>
+                    </ul>
+                </div>
+                <div class="space-y-6">
+                    <h4 class="text-white font-bold uppercase tracking-wider text-sm">Contacto</h4>
+                    <ul class="space-y-4 text-sm">
+                        <li class="flex items-start gap-3">
+                            <span class="material-symbols-outlined text-primary text-xl">location_on</span>
+                            <span>300mts Este BCR Tejar, Guarco<br />Cartago, Costa Ricaa</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <span class="material-symbols-outlined text-primary text-xl">call</span>
+                            <span>+506 64992578</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <span class="material-symbols-outlined text-primary text-xl">mail</span>
+                            <span>reservas@atelier27.com</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="space-y-6">
+                    <h4 class="text-white font-bold uppercase tracking-wider text-sm">Newsletter</h4>
+                    <p class="text-sm">Recibe noticias sobre eventos exclusivos y nuevos platos.</p>
+                    <form class="flex gap-2">
+                        <input class="bg-slate-900 border-slate-800 rounded-lg text-sm px-4 py-2 w-full focus:ring-primary focus:border-primary" placeholder="Tu email" type="email" />
+                        <button class="bg-primary text-white p-2 rounded-lg hover:bg-primary/90 transition-colors" type="submit">
+                            <span class="material-symbols-outlined">send</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <div class="max-w-7xl mx-auto mt-20 pt-8 border-t border-slate-900 text-center text-xs uppercase tracking-widest">
+                © 2024 Atelier 27. Todos los derechos reservados.
+            </div>
+        </footer>
+    </div>

@@ -1,0 +1,105 @@
+@model IEnumerable<ProyectoFinalGrupo3.Models.Producto>
+@{
+    Layout = "~/Views/Shared/_CustomLayout.cshtml";
+    ViewData["Title"] = "Productos";
+}
+<partial name="Partials/_ModalEliminar" model="Model" />
+<partial name="Partials/_ModalEditar" model="Model" />
+<partial name="Partials/_ModalVer" model="Model" />
+<partial name="Partials/_ModalAgregar" model="Model" />
+<partial name="Partials/_ModalError" model="Model" />
+
+<div class="p-6 lg:p-10">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+        <div>
+            <h2 class="text-slate-900 dark:text-slate-100 text-3xl font-black tracking-tight mb-1">Listado de Productos</h2>
+            <p class="text-slate-500 dark:text-primary/60 text-sm">Gestiona los productos del menú de tu restaurante.</p>
+        </div>
+        <button id="btnAgregar" class="flex items-center gap-2 bg-primary hover:bg-primary/90 text-slate-100 px-6 py-2.5 rounded-lg font-bold text-sm transition-all shadow-lg shadow-primary/30">
+            <span class="material-symbols-outlined">category</span>
+            <span>Añadir Nuevo Producto</span>
+        </button>
+    </div>
+
+    <div class="bg-background-light dark:bg-background-dark border border-primary/20 rounded-xl shadow-xl overflow-hidden">
+        <table class="w-full text-left border-collapse">
+            <thead class="bg-primary/5 border-b border-primary/20">
+                <tr>
+                    <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-primary/80">Nombre</th>
+                    <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-primary/80">Categoría</th>
+                    <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-primary/80">Precio</th>
+                    <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-primary/80">Cantidad</th>
+                    <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-primary/80">Estado</th>
+                    <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-primary/80 text-center">Acciones</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-primary/10">
+                @foreach (var item in Model)
+                {
+                    <tr class="hover:bg-primary/5 transition-colors group">
+                        <td class="px-6 py-4 font-bold text-slate-900 dark:text-slate-100">@item.Nombre</td>
+                        <td class="px-6 py-4">
+                            <span class="px-2 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-xs font-medium text-slate-600 dark:text-slate-300">
+                                @item.CodigoCategoriaNavigation?.Descripcion
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 font-bold text-primary">$@item.Precio.ToString("F2")</td>
+                        <td class="px-6 py-4">@item.Cantidad</td>
+                        <td class="px-6 py-4">
+                            @if (item.Estado == 1)
+                            {
+                                <div class="flex items-center gap-1.5 text-green-500">
+                                    <span class="size-2 rounded-full bg-green-500"></span>
+                                    <span class="text-xs font-bold uppercase">Disponible</span>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="flex items-center gap-1.5 text-slate-400">
+                                    <span class="size-2 rounded-full bg-slate-400"></span>
+                                    <span class="text-xs font-bold uppercase">Agotado</span>
+                                </div>
+                            }
+                        </td>
+                        <td class="px-6 py-5">
+                            <div class="flex justify-center gap-2">
+                                <button class="btnVer p-2 rounded-lg hover:bg-primary/20 text-slate-400 hover:text-primary transition-all" title="Ver"
+                                        data-codigo="@item.CodigoProducto"
+                                        data-nombre="@item.Nombre"
+                                        data-categoria="@item.CodigoCategoria"
+                                        data-precio="@item.Precio"
+                                        data-cantidad="@item.Cantidad"
+                                        data-empaque="@item.RequiereEmpaque"
+                                        data-costoempaque="@item.CostoEmpaque"
+                                        data-estado="@item.Estado"
+                                        data-imagen="@item.UrlImagen">
+                                    <span class="material-symbols-outlined text-[20px]">visibility</span>
+                                </button>
+                                <button class="btnEditar p-2 rounded-lg hover:bg-primary/20 text-slate-400 hover:text-primary transition-all" title="Editar"
+                                        data-codigo="@item.CodigoProducto"
+                                        data-nombre="@item.Nombre"
+                                        data-categoria="@item.CodigoCategoria"
+                                        data-precio="@item.Precio"
+                                        data-cantidad="@item.Cantidad"
+                                        data-empaque="@item.RequiereEmpaque"
+                                        data-costoempaque="@item.CostoEmpaque"
+                                        data-estado="@item.Estado"
+                                        data-imagen="@item.UrlImagen">
+                                    <span class="material-symbols-outlined text-[20px]">edit</span>
+                                </button>
+                                <button class="btnEliminar p-2 rounded-lg hover:bg-red-500/10 text-slate-400 hover:text-red-500 transition-all" title="Eliminar"
+                                        data-id="@item.CodigoProducto">
+                                    <span class="material-symbols-outlined text-[20px]">delete</span>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/productos.js"></script>
+}

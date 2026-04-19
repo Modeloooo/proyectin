@@ -1,0 +1,264 @@
+@model List<ProyectoFinalGrupo3.Models.Pedido>
+@using System.Text.Json
+@{
+    Layout = "~/Views/Shared/_CustomLayout.cshtml";
+    ViewData["Title"] = "Historial de Pedidos";
+}
+
+<main class="h-screen overflow-y-auto bg-background-light dark:bg-background-dark">
+    <!-- Modal Global de Detalles -->
+    <div id="orderDetailModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-sm transition-opacity">
+        <div class="w-full max-w-2xl bg-white dark:bg-surface-dark border border-slate-200 dark:border-accent-dark rounded-2xl shadow-2xl relative overflow-hidden flex flex-col max-h-[85vh]">
+            
+            <!-- Header Modal -->
+            <div class="bg-slate-50 dark:bg-slate-800/50 p-6 sm:p-8 flex items-start justify-between border-b border-outline-variant">
+                <div>
+                    <h3 class="text-2xl font-black text-slate-900 dark:text-white flex items-center gap-3">
+                        Pedido <span id="modalOrderNumber" class="text-primary">#---</span>
+                    </h3>
+                    <p class="text-sm text-slate-500 dark:text-slate-400 mt-2 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-[16px]">calendar_today</span>
+                        <span id="modalOrderDate">--/--/----</span>
+                    </p>
+                </div>
+                <div class="flex flex-col items-end gap-3">
+                    <button type="button" onclick="closeModal()" class="text-slate-400 hover:text-red-500 transition-colors p-1 bg-transparent rounded-full flex items-center justify-center">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                    <span id="modalOrderStatus" class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-slate-100 text-slate-600">Estado</span>
+                </div>
+            </div>
+
+            <!-- Body Modal (Scrollable) -->
+            <div class="flex-1 overflow-y-auto p-6 sm:p-8">
+                
+                <h4 class="text-sm font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-4 border-b border-slate-100 dark:border-primary/10 pb-2">Artículos del Pedido</h4>
+                
+                <div id="modalItemsList" class="space-y-4 mb-8">
+                    <!-- Javascript inyectará items aquí -->
+                </div>
+
+                <div class="bg-slate-50 dark:bg-slate-800/30 rounded-xl p-6 border border-slate-100 dark:border-primary/10 space-y-3">
+                    <div class="flex justify-between text-slate-600 dark:text-slate-400 text-sm">
+                        <span>Método de Entrega</span>
+                        <span id="modalDeliveryType" class="font-medium text-slate-900 dark:text-slate-200">Local</span>
+                    </div>
+                    <div class="border-t border-slate-200 dark:border-primary/10 pt-3 flex justify-between items-end mt-2">
+                        <span class="text-xs font-bold uppercase tracking-widest text-slate-500">Monto Total Pagado</span>
+                        <span id="modalTotal" class="text-3xl font-black text-primary">₡0.00</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Footer Modal -->
+            <div class="p-6 bg-white dark:bg-surface-dark border-t border-outline-variant flex justify-end">
+                <button type="button" onclick="closeModal()" class="px-6 py-3 bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-white rounded-xl font-bold transition-colors">
+                    Cerrar Detalle
+                </button>
+            </div>
+            
+        </div>
+    </div>
+
+
+    <header class="max-w-5xl mx-auto px-4 md:px-8 mb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+        <div>
+            <h2 class="text-3xl font-black text-slate-900 dark:text-white tracking-tight">Historial de Pedidos</h2>
+            <p class="text-slate-500 dark:text-primary/60 mt-1">Consulta el detalle de tus experiencias pasadas con nosotros.</p>
+        </div>
+        
+        @if (Model.Any())
+        {
+            <div class="flex gap-2 relative">
+                <select id="statusFilter" onchange="filterOrders()" class="appearance-none px-4 py-2 pr-10 text-sm font-bold bg-white dark:bg-surface-dark border border-slate-200 dark:border-accent-dark text-slate-700 dark:text-slate-200 rounded-lg outline-none cursor-pointer hover:border-primary transition-colors shadow-sm">
+                    <option value="ALL">📋 Todos los Pedidos</option>
+                    <option value="Pagado">💳 Pagados</option>
+                    <option value="Preparación">⏳ En Preparación</option>
+                    <option value="Pendiente">🕒 Pendientes</option>
+                    <option value="Servido">✅ Servidos / Entregados</option>
+                    <option value="Cancelado">❌ Cancelados</option>
+                </select>
+                <span class="material-symbols-outlined text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-lg">expand_more</span>
+            </div>
+        }
+    </header>
+
+    <div class="max-w-5xl mx-auto px-4 md:px-8 space-y-6" id="ordersContainer">
+        
+        @if (!Model.Any())
+        {
+            <div class="flex flex-col items-center justify-center py-24 px-4 text-center bg-white dark:bg-surface-container-high rounded-3xl border border-slate-100 dark:border-accent-dark shadow-sm">
+                <div class="w-24 h-24 bg-slate-50 dark:bg-slate-800 rounded-full flex items-center justify-center mb-6">
+                    <span class="material-symbols-outlined text-5xl text-slate-300 dark:text-slate-500">receipt_long</span>
+                </div>
+                <h3 class="text-2xl font-bold text-slate-800 dark:text-white mb-2">Aún no hay historia que contar</h3>
+                <p class="text-slate-500 max-w-md mx-auto mb-8">Parece que todavía no has realizado ningún pedido. ¡Visita nuestro menú y empieza a disfrutar!</p>
+                <a href="/Orders/CreateUserOrder" class="px-8 py-3 bg-primary text-white font-bold rounded-xl shadow-lg shadow-primary/20 hover:scale-105 active:scale-95 transition-all">Explorar Menú</a>
+            </div>
+        }
+        else
+        {
+            @foreach (var pedido in Model)
+            {
+                <div class="orderBorderCard group bg-white dark:bg-surface-dark border border-slate-200 dark:border-accent-dark rounded-xl overflow-hidden shadow-sm hover:shadow-md hover:border-primary/30 transition-all" data-status="@pedido.Estado">
+                    <div class="flex flex-col md:flex-row">
+                        <div class="flex-1 p-6 flex flex-col justify-between">
+                            <div class="flex flex-wrap justify-between items-start gap-4">
+                                <div class="space-y-1">
+                                    <div class="flex items-center gap-2">
+                                        <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider
+                                            @(pedido.Estado == "Pagado" ? "bg-indigo-100 text-indigo-700" :
+                                              pedido.Estado == "Pendiente" ? "bg-slate-100 text-slate-600" :
+                                              pedido.Estado == "Preparación" ? "bg-amber-100 text-amber-700 animate-pulse" :
+                                              pedido.Estado == "Servido" ? "bg-green-100 text-green-700" :
+                                              "bg-red-100 text-red-700")">
+                                            @pedido.Estado
+                                        </span>
+                                        <span class="text-slate-400 dark:text-primary/40 text-xs">•</span>
+                                        <span class="text-slate-500 dark:text-slate-400 text-sm">@pedido.Fecha.ToString("dd MMM yyyy, hh:mm tt")</span>
+                                    </div>
+                                    <h3 class="text-xl font-bold text-slate-900 dark:text-white">Pedido #@pedido.CodigoPedido</h3>
+                                    
+                                    <!-- Mini Summary String -->
+                                    <p class="text-sm text-slate-500 dark:text-slate-400 mt-2 line-clamp-1">
+                                        @string.Join(", ", pedido.PedidoDetalles.Select(d => $"{d.Cantidad}x {d.CodigoProductoNavigation.Nombre}"))
+                                    </p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-xs text-slate-400 dark:text-primary/60 font-medium uppercase tracking-widest leading-none mb-1">Total abonado</p>
+                                    <p class="text-2xl font-black text-primary">₡@pedido.Total.ToString("N2")</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Data oculta preparacion para el Modal -->
+                        @{
+                            var cleanDetails = pedido.PedidoDetalles.Select(d => new {
+                                nombre = d.CodigoProductoNavigation.Nombre,
+                                cantidad = d.Cantidad,
+                                precioUnitario = d.PrecioUnitario,
+                                totalLinea = d.Cantidad * d.PrecioUnitario
+                            });
+                            string jsonDetails = JsonSerializer.Serialize(cleanDetails);
+                        }
+
+                        <div class="bg-slate-50 dark:bg-slate-800/30 flex justify-center md:items-center border-t md:border-t-0 md:border-l border-slate-100 dark:border-accent-dark p-6 shrink-0">
+                            <button type="button" 
+                                    class="w-full md:w-auto h-full flex justify-center items-center gap-2 bg-transparent hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-white px-6 py-3 rounded-lg text-sm font-bold transition-all shadow-sm"
+                                    data-id="@pedido.CodigoPedido"
+                                    data-date="@pedido.Fecha.ToString("dd MMM yyyy, hh:mm tt")"
+                                    data-status="@pedido.Estado"
+                                    data-type="@(pedido.TipoPedido ?? "Local")"
+                                    data-total="@pedido.Total.ToString("N2")"
+                                    data-items='@jsonDetails'
+                                    onclick="openOrderModal(this)">
+                                <span class="material-symbols-outlined text-[18px]">receipt_long</span>
+                                Ver Detalles
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</main>
+
+@section Scripts {
+    <script>
+        // Modal Logic
+        const modal = document.getElementById('orderDetailModal');
+        
+        function getStatusColorClass(status) {
+            switch(status) {
+                case "Pagado": return "bg-indigo-100 text-indigo-700 border border-indigo-200";
+                case "Pendiente": return "bg-slate-100 text-slate-600 border border-slate-200";
+                case "Preparación": return "bg-amber-100 text-amber-700 border border-amber-200 animate-pulse";
+                case "Servido": return "bg-green-100 text-green-700 border border-green-200";
+                default: return "bg-red-100 text-red-700 border border-red-200";
+            }
+        }
+
+        function openOrderModal(btn) {
+            // Extraer datos del boton presionado
+            const id = btn.getAttribute('data-id');
+            const date = btn.getAttribute('data-date');
+            const status = btn.getAttribute('data-status');
+            const type = btn.getAttribute('data-type');
+            const total = btn.getAttribute('data-total');
+            const itemsRaw = btn.getAttribute('data-items');
+            
+            let items = [];
+            try {
+                items = JSON.parse(itemsRaw);
+            } catch(e) { console.error("Error parsing items", e); }
+
+            // Inyectar al UI del modal
+            document.getElementById('modalOrderNumber').textContent = id;
+            document.getElementById('modalOrderDate').textContent = date;
+            document.getElementById('modalDeliveryType').textContent = type || 'Local';
+            document.getElementById('modalTotal').textContent = "₡" + total;
+            
+            const badges = document.getElementById('modalOrderStatus');
+            badges.textContent = status;
+            badges.className = "px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider " + getStatusColorClass(status);
+
+            // Generar lista de Items
+            const itemsContainer = document.getElementById('modalItemsList');
+            itemsContainer.innerHTML = ''; // Clear prev
+
+            items.forEach(item => {
+                const formatter = new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                const rowTotal = formatter.format(item.totalLinea);
+
+                const div = document.createElement('div');
+                div.className = "flex justify-between items-center bg-white dark:bg-background-dark border border-slate-100 dark:border-accent-dark p-4 rounded-xl";
+                div.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded bg-primary/10 text-primary flex items-center justify-center font-black text-sm">
+                            ${item.cantidad}x
+                        </div>
+                        <p class="font-bold text-slate-800 dark:text-slate-200">${item.nombre}</p>
+                    </div>
+                    <p class="font-black text-slate-800 dark:text-slate-200">₡${rowTotal}</p>
+                `;
+                itemsContainer.appendChild(div);
+            });
+
+            // Mostrar
+            modal.classList.remove('hidden');
+        }
+
+        function closeModal() {
+            modal.classList.add('hidden');
+        }
+
+        // Click outside to close
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+
+        // Filter Logic
+        function filterOrders() {
+            const filterVal = document.getElementById('statusFilter').value;
+            const cards = document.querySelectorAll('.orderBorderCard');
+            
+            let visibleCount = 0;
+
+            cards.forEach(card => {
+                const status = card.getAttribute('data-status');
+                if (filterVal === 'ALL' || status === filterVal) {
+                    card.style.display = '';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            // Si se filtra y no hay nada (Opcional UX Extra: mostrar mensaje)
+            // if(visibleCount === 0) { ... }
+        }
+    </script>
+}

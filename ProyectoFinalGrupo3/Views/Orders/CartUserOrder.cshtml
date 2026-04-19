@@ -1,0 +1,163 @@
+@model List<CarritoItem>
+
+@{
+    Layout = "~/Views/Shared/_CustomLayoutPublic.cshtml";
+    ViewData["Title"] = "Tu Carrito";
+}
+
+<main class="flex-1 flex flex-col md:flex-row overflow-hidden">
+    <section class="flex-1 overflow-y-auto p-6 md:p-12 relative">
+        <div class="max-w-3xl mx-auto" id="cartContainer">
+            <header class="mb-10 flex justify-between items-end">
+                <div>
+                    <h2 class="text-4xl font-black text-slate-900 dark:text-white tracking-tight">Tu Carrito</h2>
+                </div>
+                @if (Model.Any())
+                {
+                    <button type="button" onclick="updateCartState(0, 'clear')" class="text-sm font-medium text-primary hover:underline flex items-center gap-1" id="clearCartBtn">
+                        <span class="material-symbols-outlined text-sm">delete_sweep</span> Vaciar carrito
+                    </button>
+                }
+            </header>
+
+            <div id="cartItemsWrapper" class="space-y-6 @(!Model.Any() ? "hidden" : "")">
+                @foreach (var item in Model)
+                {
+                    <div id="cartItem_@(item.CodigoProducto)" class="flex items-center gap-6 p-4 rounded-xl bg-white dark:bg-surface-dark border border-slate-100 dark:border-accent-dark group transition-all hover:border-primary/30">
+                        <div class="size-24 rounded-full overflow-hidden shrink-0 border-2 border-primary/20">
+                            <img class="w-full h-full object-cover" src="@item.UrlImagen" alt="@item.Nombre" onerror="this.src='https://placehold.co/400x400/e2e8f0/64748b?text=Plato'" />
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-white">@item.Nombre</h3>
+                            <p class="text-sm text-slate-500 dark:text-slate-400">Precio unitario: ₡<span class="unit-price" data-price="@item.Precio">@item.Precio.ToString("N2")</span></p>
+                            <div class="mt-3 flex items-center justify-between">
+                                <p class="text-lg font-semibold text-primary">₡<span id="itemTotal_@(item.CodigoProducto)">@((item.Precio * item.Cantidad).ToString("N2"))</span></p>
+                                <div class="flex items-center gap-4 bg-slate-100 dark:bg-background-dark rounded-full px-3 py-1">
+                                    <button type="button" onclick="updateCartState(@item.CodigoProducto, 'decrease')" class="size-8 rounded-full flex items-center justify-center hover:bg-slate-200 dark:hover:bg-accent-dark transition-colors">
+                                        <span class="material-symbols-outlined text-lg">remove</span>
+                                    </button>
+                                    <span id="itemQty_@(item.CodigoProducto)" class="text-sm font-bold w-4 text-center">@item.Cantidad</span>
+                                    <button type="button" onclick="updateCartState(@item.CodigoProducto, 'increase')" class="size-8 rounded-full flex items-center justify-center hover:bg-slate-200 dark:hover:bg-accent-dark transition-colors">
+                                        <span class="material-symbols-outlined text-lg">add</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" onclick="updateCartState(@item.CodigoProducto, 'remove')" class="p-2 text-slate-300 hover:text-red-500 transition-colors">
+                            <span class="material-symbols-outlined">delete</span>
+                        </button>
+                    </div>
+                }
+            </div>
+
+            <div id="emptyCartMessage" class="flex flex-col items-center justify-center py-20 @(Model.Any() ? "hidden" : "")">
+                <div class="w-32 h-32 bg-slate-100 dark:bg-accent-dark rounded-full flex items-center justify-center mb-6">
+                    <span class="material-symbols-outlined text-6xl text-slate-300 dark:text-slate-500">shopping_cart</span>
+                </div>
+                <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-2">Tu carrito está solitario</h3>
+                <p class="text-slate-500 dark:text-slate-400 mb-8 text-center max-w-sm">Aún no has agregado platos. ¡Visita el menú y descubre algo delicioso!</p>
+                <a href="/Orders/CreateUserOrder" class="px-8 py-3 bg-primary text-white rounded-full font-bold shadow-lg shadow-primary/20 hover:scale-105 active:scale-95 transition-all">Ver Menú Principal</a>
+            </div>
+
+            <div class="mt-12 flex items-center justify-between @(!Model.Any() ? "hidden" : "")" id="continueShoppingBottom">
+                <a class="flex items-center gap-2 text-slate-500 dark:text-slate-400 hover:text-primary transition-colors font-medium" href="/Orders/CreateUserOrder">
+                    <span class="material-symbols-outlined">arrow_back</span>
+                    Continuar Comprando
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <aside id="orderSummaryAside" class="w-full md:w-[400px] bg-white dark:bg-surface-dark border-l border-slate-200 dark:border-accent-dark p-8 flex flex-col justify-between overflow-y-auto @(!Model.Any() ? "opacity-50 pointer-events-none grayscale" : "transition-opacity")">
+        <div>
+            <h3 class="text-2xl font-bold dark:text-white mb-8">Resumen del Pedido</h3>
+            <div class="space-y-4 border-t border-slate-100 dark:border-accent-dark pt-6">
+                <div class="flex justify-between text-slate-600 dark:text-slate-400">
+                    <span>Subtotal</span>
+                    <span class="font-medium">₡<span id="summarySubtotal">@ViewBag.Subtotal.ToString("N2")</span></span>
+                </div>
+                <div class="flex justify-between text-slate-600 dark:text-slate-400">
+                    <span>Impuestos (IVA)</span>
+                    <span class="font-medium">₡<span id="summaryIva">@ViewBag.IVA.ToString("N2")</span></span>
+                </div>
+                <div class="flex justify-between text-slate-600 dark:text-slate-400">
+                    <span>Costo de Envío</span>
+                    <span class="font-medium text-emerald-500 uppercase text-xs font-bold tracking-wider pt-1">
+                        @(ViewBag.Envio == 0 ? "Gratis" : "₡" + ViewBag.Envio.ToString("N2"))
+                    </span>
+                </div>
+            </div>
+
+            <div class="flex items-end justify-between border-t border-slate-100 dark:border-accent-dark mt-6 pt-6">
+                <div>
+                    <p class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Total a pagar</p>
+                    <p class="text-4xl font-black text-primary">₡<span id="summaryTotal">@ViewBag.Total.ToString("N2")</span></p>
+                </div>
+            </div>
+        </div>
+        <div class="space-y-3 mt-8">
+            <a href="/Orders/DataUserOrder" id="checkoutBtn" class="w-full bg-primary hover:bg-primary/90 text-white py-4 rounded-xl font-bold text-lg shadow-lg shadow-primary/20 transition-all flex items-center justify-center gap-3">
+                Finalizar Pedido
+                <span class="material-symbols-outlined">keyboard_double_arrow_right</span>
+            </a>
+        </div>
+    </aside>
+
+</main>
+
+@section Scripts {
+    <script>
+        async function updateCartState(id, actionStr) {
+            try {
+                const response = await fetch('@Url.Action("UpdateCartItemAjax", "Orders")', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: id, action: actionStr })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.success) {
+                        
+                        // Update individual item visually
+                        if (actionStr === 'increase' || actionStr === 'decrease') {
+                            document.getElementById(`itemQty_${id}`).textContent = data.itemQuantity;
+                            document.getElementById(`itemTotal_${id}`).textContent = data.itemTotal.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                        } else if (actionStr === 'remove') {
+                            document.getElementById(`cartItem_${id}`).remove();
+                        } else if (actionStr === 'clear') {
+                            document.getElementById('cartItemsWrapper').innerHTML = '';
+                        }
+
+                        // Update Order Summary Panel
+                        document.getElementById('summarySubtotal').textContent = data.subtotal.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                        document.getElementById('summaryIva').textContent = data.iva.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                        document.getElementById('summaryTotal').textContent = data.total.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+
+                        // Empty State Handling
+                        if (data.isEmpty) {
+                            document.getElementById('cartItemsWrapper').classList.add('hidden');
+                            document.getElementById('emptyCartMessage').classList.remove('hidden');
+                            const bottomCont = document.getElementById('continueShoppingBottom');
+                            if(bottomCont) bottomCont.classList.add('hidden');
+                            
+                            const clearBtn = document.getElementById('clearCartBtn');
+                            if(clearBtn) clearBtn.classList.add('hidden');
+
+                            // Disable checkout panel
+                            const aside = document.getElementById('orderSummaryAside');
+                            if (aside) aside.classList.add('opacity-50', 'pointer-events-none', 'grayscale');
+                        }
+
+                    } else {
+                        alert("Error: " + data.message);
+                    }
+                } else {
+                    alert("No se pudo contactar el servidor.");
+                }
+            } catch (error) {
+                console.error("Fetch error", error);
+            }
+        }
+    </script>
+}

@@ -1,0 +1,179 @@
+@model ProyectoFinalGrupo3.Models.Usuarios;
+@{
+    Layout = "~/Views/Shared/_CustomLayoutPublic.cshtml";
+    ViewData["Title"] = "Registro";
+}
+<partial name="Partials/_ModalRegistroExitoso" model="Model" />
+<partial name="Partials/_ModalRegistroFallo" model="Model" />
+
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+    <div class="layout-container flex h-full grow flex-col">
+        <header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-primary/20 px-6 py-4 lg:px-40">
+            <div class="flex items-center gap-4 text-primary">
+                <div class="size-8 flex items-center justify-center">
+                    <span class="material-symbols-outlined text-3xl">restaurant_menu</span>
+                </div>
+                <h2 class="text-slate-900 dark:text-slate-100 text-xl font-bold leading-tight tracking-tight uppercase">Atelier 27</h2>
+            </div>
+            <div class="flex items-center gap-2">
+                <button class="flex size-10 cursor-pointer items-center justify-center rounded-lg bg-primary/10 text-primary hover:bg-primary/20 transition-colors">
+                    <span class="material-symbols-outlined">notifications</span>
+                </button>
+            </div>
+        </header>
+        <main class="flex flex-1 justify-center py-10 px-6 lg:px-40">
+            <div class="layout-content-container flex flex-col max-w-[560px] flex-1">
+                <div class="mb-8">
+                    <h1 class="text-slate-900 dark:text-slate-100 text-4xl font-black leading-tight tracking-tight mb-2">Crear Cuenta</h1>
+                    <p class="text-slate-600 dark:text-primary/70 text-base font-normal">Regístrese para disfrutar de una experiencia gastronómica exclusiva en Atelier 27.</p>
+                </div>
+                <form asp-action="CrearCliente" asp-controller="Account" method="post" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <label class="flex flex-col gap-2">
+                            <span class="text-slate-700 dark:text-slate-200 text-sm font-semibold uppercase tracking-wider">
+                                Número de identificación
+                            </span>
+                            <input asp-for="Identificacion"
+                                   class="form-input w-full rounded-lg border-slate-300 dark:border-primary/30
+                                              bg-white dark:bg-primary/5 text-slate-900 dark:text-slate-100
+                                              focus:border-primary focus:ring-1 focus:ring-primary h-14 px-4
+                                              placeholder:text-slate-400 dark:placeholder:text-slate-600"
+                                   placeholder="Ej: 123456789" type="text" />
+                            <span asp-validation-for="Identificacion" class="text-red-500 text-sm"></span>
+                        </label>
+                        <label class="flex flex-col gap-2">
+                            <span class="text-slate-700 dark:text-slate-200 text-sm font-semibold uppercase tracking-wider">
+                                Nombre completo
+                            </span>
+                            <input asp-for="NombreCompleto"
+                                   class="form-input w-full rounded-lg border-slate-300 dark:border-primary/30
+                                          bg-white dark:bg-primary/5 text-slate-900 dark:text-slate-100
+                                          focus:border-primary focus:ring-1 focus:ring-primary h-14 px-4
+                                          placeholder:text-slate-400 dark:placeholder:text-slate-600"
+                                   placeholder="Nombre y Apellidos" type="text" />
+                            <span asp-validation-for="NombreCompleto" class="text-red-500 text-sm"></span>
+                        </label>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <label class="flex flex-col gap-2">
+                            <span class="text-slate-700 dark:text-slate-200 text-sm font-semibold uppercase tracking-wider">
+                                Género
+                            </span>
+                            <select asp-for="Genero"
+                                    class="form-select w-full rounded-lg border-slate-300 dark:border-primary/30
+                                           bg-white dark:bg-primary/5 text-slate-900 dark:text-slate-100
+                                           focus:border-primary focus:ring-1 focus:ring-primary h-14 px-4"
+                                    style="color:black">
+                                <option disabled selected value="">Seleccionar género</option>
+                                <option value="masculino">Masculino</option>
+                                <option value="femenino">Femenino</option>
+                                <option value="no-especifica">No especifica</option>
+                            </select>
+                            <span asp-validation-for="Genero" class="text-red-500 text-sm"></span>
+                        </label>
+                        <label class="flex flex-col gap-2">
+                            <span class="text-slate-700 dark:text-slate-200 text-sm font-semibold uppercase tracking-wider">
+                                Correo electrónico
+                            </span>
+                            <div class="relative">
+                                <input asp-for="Correo"
+                                       class="form-input w-full rounded-lg border-slate-300 dark:border-primary/30
+                                              bg-white dark:bg-primary/5 text-slate-900 dark:text-slate-100
+                                              focus:border-primary focus:ring-1 focus:ring-primary h-14 px-4 pr-10
+                                              placeholder:text-slate-400 dark:placeholder:text-slate-600"
+                                       placeholder="correo@ejemplo.com" type="email" />
+                                <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-green-600 text-xl">
+                                    check_circle
+                                </span>
+                            </div>
+                            <span asp-validation-for="Correo" class="text-red-500 text-sm"></span>
+                        </label>
+                    </div>
+                    <div class="p-6 rounded-xl border border-primary/20 bg-primary/5 flex flex-col gap-6">
+                        <div class="flex items-center gap-2 text-primary">
+                            <span class="material-symbols-outlined">payments</span>
+                            <span class="font-bold uppercase tracking-widest text-xs">Información de Pago</span>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <label class="flex flex-col gap-2">
+                                <span class="text-slate-700 dark:text-slate-200 text-sm font-semibold uppercase tracking-wider">Tipo de tarjeta</span>
+                                <select class="form-select w-full rounded-lg border-slate-300 dark:border-primary/30 bg-white dark:bg-primary/5 text-slate-900 dark:text-slate-100 focus:border-primary focus:ring-1 focus:ring-primary h-14 px-4">
+                                    <option value="visa">VISA</option>
+                                    <option value="mastercard">MASTERCARD</option>
+                                    <option value="amex">AMERICAN EXPRESS</option>
+                                </select>
+                            </label>
+                            <label class="flex flex-col gap-2">
+                                <span class="text-slate-700 dark:text-slate-200 text-sm font-semibold uppercase tracking-wider">Número de tarjeta</span>
+                                <div class="relative">
+                                    <input class="form-input w-full rounded-lg border-slate-300 dark:border-primary/30 bg-white dark:bg-primary/5 text-slate-900 dark:text-slate-100 focus:border-primary focus:ring-1 focus:ring-primary h-14 px-4 placeholder:text-slate-400 dark:placeholder:text-slate-600" placeholder="****-****-****-4242" type="text" value="****-****-****-4242" />
+                                    <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-600">lock</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                    <label class="flex flex-col gap-2">
+                        <span class="text-slate-700 dark:text-slate-200 text-sm font-semibold uppercase tracking-wider">
+                            Contraseña
+                        </span>
+                        <div class="relative">
+                            <input asp-for="Contrasena"
+                                   class="form-input w-full rounded-lg border-slate-300 dark:border-primary/30
+                                          bg-white dark:bg-primary/5 text-slate-900 dark:text-slate-100
+                                          focus:border-primary focus:ring-1 focus:ring-primary h-14 px-4 pr-10
+                                          placeholder:text-slate-400 dark:placeholder:text-slate-600"
+                                   placeholder="••••••••" type="password" />
+                            <button class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-600" type="button">
+                                <span class="material-symbols-outlined">visibility</span>
+                            </button>
+                        </div>
+                        <span asp-validation-for="Contrasena" class="text-red-500 text-sm"></span>
+                    </label>
+                    <input type="hidden" name="Perfil" value="Cliente" />
+                    <div class="flex flex-col gap-4 mt-4">
+                        <button class="w-full bg-primary hover:bg-primary/90 text-white font-bold h-14 rounded-lg transition-all shadow-lg shadow-primary/20 uppercase tracking-widest" type="submit">
+                            Registrarse
+                        </button>
+                        <div class="flex items-center justify-center gap-2 mt-2">
+                            <span class="text-slate-600 dark:text-slate-400 text-sm">¿Ya tiene una cuenta?</span>
+                            <a class="text-primary font-bold text-sm hover:underline decoration-2 underline-offset-4" href="#">Iniciar sesión</a>
+                        </div>
+                    </div>
+                </form>
+                <footer class="mt-12 pt-8 border-t border-primary/10 flex flex-col items-center gap-4 text-center">
+                    <div class="flex gap-6">
+                        <a class="text-slate-400 hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined">language</span></a>
+                        <a class="text-slate-400 hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined">info</span></a>
+                        <a class="text-slate-400 hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined">contact_support</span></a>
+                    </div>
+                    <p class="text-slate-500 text-xs uppercase tracking-widest">© 2024 Atelier 27 Restaurant Group</p>
+                </footer>
+            </div>
+        </main>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        function closeModal(id) {
+            document.getElementById(id).classList.add("hidden");
+        }
+
+        window.onload = function() {
+            var success = '@ViewBag.RegisterSuccess';
+            if (success === 'True') {
+                document.getElementById("registerSuccessModal").classList.remove("hidden");
+                setTimeout(function() {
+                    window.location.href = '@Url.Action("Login", "Account")';
+                }, 3000);
+            } else if (success === 'False') {
+                document.getElementById("registerFailModal").classList.remove("hidden");
+            }
+        }
+    </script>
+}
+
+
+
+

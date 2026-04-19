@@ -1,0 +1,61 @@
+﻿
+body {
+    font-family: "Work Sans", sans-serif;
+}
+
+.form-select {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23b7860b' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 0.5rem center;
+    background-repeat: no-repeat;
+    background-size: 1.5em 1.5em;
+    padding-right: 2.5rem;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+body {
+    font-family: "Work Sans", sans-serif
+}
+
+.bg-overlay {
+    background-image: linear-gradient(to bottom, rgba(34, 29, 16, 0.8), rgba(34, 29, 16, 0.95)), url(https://lh3.googleusercontent.com/aida-public/AB6AXuCo28_Dkhf8p0JzumD1NBxe-UNnhcxMufap8t__j4oVzvLXGYC4c2nzfUDFZXkYdCo1N3IaDz4slGAV1q7vL6IAQo4KIBROfj3pVrb8DdMcHA10aUBRS0luNKc82DyAYQ8KEVfrh3Bygw4m3gIRNesp8mbjEX6_Zg8cuzdtwwISy_6BoHQ-4AFUUw_i7oiuNXg-cR5KLe3slWlb6I_NqNCCfEpHXqc_U-Xz9UbZ5Cx0I7mjvKLrJE6bu-7pmFds-O_PaA3fFBVxiMCb);
+    background-size: cover;
+    background-position: center
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+.material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: #221d10;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #393428;
+    border-radius: 10px;
+}
+
+.material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+.sidebar-active {
+    background-color: rgba(183, 134, 11, 0.2);
+    border-left: 4px solid #b7860b;
+}

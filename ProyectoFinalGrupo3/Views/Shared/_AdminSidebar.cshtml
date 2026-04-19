@@ -1,0 +1,49 @@
+﻿@{
+}
+<aside class="w-64 flex-shrink-0 bg-slate-100 dark:bg-black/40 border-r border-slate-200 dark:border-primary/10 flex flex-col">
+    <div class="p-6 flex items-center gap-3">
+        <div class="size-10 bg-primary rounded-full flex items-center justify-center text-white">
+            <span class="material-symbols-outlined">restaurant</span>
+        </div>
+        <div class="flex flex-col">
+            <h1 class="text-lg font-bold leading-none tracking-tight text-primary">Atelier 27</h1>
+            <p class="text-xs text-slate-500 dark:text-primary/60 font-medium">Admin Panel</p>
+        </div>
+    </div>
+    <nav class="flex-1 px-4 py-4 space-y-1 custom-scrollbar overflow-y-auto">
+        <a onclick="document.location.href='@Url.Content("~/Categories/Index/")'" class="flex items-center gap-3 px-4 py-3 rounded-lg @(ViewData["Title"]?.ToString() == "Categories" ? "bg-primary text-background-dark font-semibold" : "text-text-muted hover:bg-neutral-gold/20 hover:text-primary")">
+            <span class="material-symbols-outlined">category</span>
+            <span>Categorías</span>
+        </a>
+        <a onclick="document.location.href='@Url.Content("~/Products/Index/")'" class="flex items-center gap-3 px-4 py-3 rounded-lg @(ViewData["Title"]?.ToString() == "Products" ? "bg-primary text-background-dark font-semibold" : "text-text-muted hover:bg-neutral-gold/20 hover:text-primary")">
+            <span class="material-symbols-outlined">flatware</span>
+            <span>Productos</span>
+        </a>
+        <a onclick="document.location.href='@Url.Content("~/Tables/Index/")'" class="flex items-center gap-3 px-4 py-3 rounded-lg @(ViewData["Title"]?.ToString() == "Tables" ? "bg-primary text-background-dark font-semibold" : "text-text-muted hover:bg-neutral-gold/20 hover:text-primary")">
+            <span class="material-symbols-outlined">table_restaurant</span>
+            <span>Mesas</span>
+        </a>
+        <a onclick="document.location.href='@Url.Content("~/Orders/Index/")'" class="flex items-center gap-3 px-4 py-3 rounded-lg @(ViewData["Title"]?.ToString() == "Orders" ? "bg-primary text-background-dark font-semibold" : "text-text-muted hover:bg-neutral-gold/20 hover:text-primary")">
+            <span class="material-symbols-outlined">receipt_long</span>
+            <span>Pedidos</span>
+        </a>
+        <a onclick="document.location.href='@Url.Content("~/History/Index/")'" class="flex items-center gap-3 px-4 py-3 rounded-lg @(ViewData["Title"]?.ToString() == "History" ? "bg-primary text-background-dark font-semibold" : "text-text-muted hover:bg-neutral-gold/20 hover:text-primary")">
+            <span class="material-symbols-outlined">history</span>
+            <span>Historial de Compras</span>
+        </a>
+        <a onclick="document.location.href='@Url.Content("~/Users/Index/")'" class="flex items-center gap-3 px-4 py-3 rounded-lg @(ViewData["Title"]?.ToString() == "Users" ? "bg-primary text-background-dark font-semibold" : "text-text-muted hover:bg-neutral-gold/20 hover:text-primary")">
+            <span class="material-symbols-outlined">manage_accounts</span>
+            <span>Mantenimiento Usuarios</span>
+        </a>
+    </nav>
+    <div class="pt-4 mt-4 border-t border-neutral-gold/20">
+        <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-red-400 hover:bg-red-400/10 transition-all"
+           asp-controller="Account" asp-action="Logout">
+            <span class="material-symbols-outlined">logout</span>
+            <span>Cerrar Sesión</span>
+        </a>
+    </div>
+</aside>
+
+
+

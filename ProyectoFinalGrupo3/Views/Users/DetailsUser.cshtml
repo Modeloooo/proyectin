@@ -1,0 +1,295 @@
+@model ProyectoFinalGrupo3.Models.Usuarios
+@{
+    Layout = "~/Views/Shared/_CustomLayout.cshtml";
+    ViewData["Title"] = "DetailsUser";
+
+    var generos = new List<string> { "Masculino", "Femenino", "Otro" };
+    var tiposTarjeta = new List<string> { "Visa", "MasterCard", "American Express" };
+}
+
+<!-- Modals de Feedback Globales para Integridad -->
+<div id="profileSuccessModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-sm transition-opacity">
+    <div class="w-full max-w-sm bg-white dark:bg-surface-dark border border-green-500/20 rounded-2xl p-8 shadow-2xl relative overflow-hidden flex flex-col items-center text-center">
+        <div class="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mb-6">
+            <span class="material-symbols-outlined text-green-600 dark:text-green-500 text-4xl">check_circle</span>
+        </div>
+        <h3 class="text-xl font-bold text-slate-800 dark:text-white mb-3">¡Perfil Actualizado!</h3>
+        <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-8">
+            @(TempData["Success"] ?? "Se han guardado exitosamente tus datos.")
+        </p>
+        <button type="button" onclick="document.getElementById('profileSuccessModal').classList.add('hidden')" class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-3 px-6 rounded-lg transition-all">
+            Continuar
+        </button>
+    </div>
+</div>
+
+<div id="profileFailModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-sm transition-opacity">
+    <div class="w-full max-w-sm bg-white dark:bg-surface-dark border border-red-500/20 rounded-2xl p-8 shadow-2xl relative overflow-hidden flex flex-col items-center text-center">
+        <div class="w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mb-6">
+            <span class="material-symbols-outlined text-red-600 dark:text-red-500 text-4xl">error</span>
+        </div>
+        <h3 class="text-xl font-bold text-slate-800 dark:text-white mb-3">Error al actualizar</h3>
+        <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-8">
+            @(TempData["Error"] ?? "Ocurrió un error guardando tus datos.")
+        </p>
+        <button type="button" onclick="document.getElementById('profileFailModal').classList.add('hidden')" class="w-full bg-slate-200 hover:bg-slate-300 dark:bg-slate-700 dark:hover:bg-slate-600 font-bold py-3 px-6 rounded-lg transition-all dark:text-white text-slate-800">
+            Revisar datos
+        </button>
+    </div>
+</div>
+
+<main class="h-screen overflow-y-auto bg-background-light dark:bg-background-dark">
+    <div class="max-w-4xl mx-auto p-8 relative">
+        <header class="mb-10">
+            <h1 class="text-4xl font-black text-slate-900 dark:text-slate-100 tracking-tight">Mi Perfil</h1>
+            <p class="text-slate-500 dark:text-slate-400 mt-2">Gestiona tu información personal y preferencias de cuenta.</p>
+        </header>
+
+        <form asp-action="EditUser" method="post" id="profileForm">
+            <!-- Hidden PK para asegurarnos que se pasa a BD correctamente aunque el visual este disabled -->
+            <input type="hidden" name="Identificacion" value="@Model.Identificacion" />
+
+            <div class="space-y-12">
+                <!-- Section 1: Personal Information -->
+                <section class="space-y-6 bg-white dark:bg-surface-dark p-8 rounded-2xl shadow-sm border border-slate-100 dark:border-accent-dark relative">
+                    <div class="flex items-center gap-2 border-b border-primary/10 pb-4">
+                        <span class="material-symbols-outlined text-primary">badge</span>
+                        <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Información Personal</h2>
+                        <button type="button" id="btnToggleEdit" class="ml-auto flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold text-slate-500 hover:text-primary bg-slate-100 hover:bg-primary/10 dark:bg-slate-800 dark:hover:bg-primary/20 transition-colors uppercase tracking-widest">
+                            <span class="material-symbols-outlined text-[16px]">edit</span>
+                            Desbloquear
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest px-1">Identificación</label>
+                            <input disabled
+                                   class="w-full bg-slate-100 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-lg px-4 py-3 text-slate-400 outline-none cursor-not-allowed"
+                                   type="text"
+                                   id="editIdentificacion"
+                                   value="@Model.Identificacion" />
+                            <p class="text-[10px] text-slate-400 dark:text-slate-500 px-1">Tu ID es permanente y no editable.</p>
+                        </div>
+
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest px-1">Nombre Completo</label>
+                            <input readonly
+                                   class="profile-input w-full bg-slate-50 dark:bg-slate-900/30 border border-transparent focus:border-primary focus:bg-white dark:focus:bg-slate-900/80 rounded-lg px-4 py-3 text-slate-900 dark:text-slate-100 outline-none transition-all"
+                                   type="text"
+                                   id="editNombreCompleto" name="NombreCompleto"
+                                   value="@Model.NombreCompleto"
+                                   required />
+                        </div>
+
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest px-1">Correo Electrónico</label>
+                            <input readonly
+                                   class="profile-input w-full bg-slate-50 dark:bg-slate-900/30 border border-transparent focus:border-primary focus:bg-white dark:focus:bg-slate-900/80 rounded-lg px-4 py-3 text-slate-900 dark:text-slate-100 outline-none transition-all"
+                                   type="email"
+                                   id="editCorreo" name="Correo"
+                                   value="@Model.Correo"
+                                   required />
+                        </div>
+
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest px-1">Género</label>
+                            <select disabled
+                                    id="editGenero" name="Genero"
+                                    class="profile-select appearance-none w-full bg-slate-50 dark:bg-slate-900/30 border border-transparent focus:border-primary focus:bg-white dark:focus:bg-slate-900/80 rounded-lg px-4 py-3 text-slate-900 dark:text-slate-100 outline-none transition-all">
+                                <option value="">Seleccione</option>
+                                @foreach (var genero in generos)
+                                {
+                                    <option value="@genero" selected="@(!string.IsNullOrEmpty(Model.Genero) && Model.Genero == genero)">
+                                        @genero
+                                    </option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Section 2: Payment Information -->
+                <section class="space-y-6 bg-white dark:bg-surface-dark p-8 rounded-2xl shadow-sm border border-slate-100 dark:border-accent-dark">
+                    <div class="flex items-center gap-2 border-b border-primary/10 pb-4">
+                        <span class="material-symbols-outlined text-primary">credit_card</span>
+                        <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Información De Pago</h2>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest px-1">Número de Tarjeta</label>
+                            <input readonly
+                                   class="profile-input w-full bg-slate-50 dark:bg-slate-900/30 border border-transparent focus:border-primary focus:bg-white dark:focus:bg-slate-900/80 rounded-lg px-4 py-3 text-slate-900 dark:text-slate-100 outline-none transition-all"
+                                   type="text"
+                                   id="editNumeroTarjeta" name="NumeroTarjeta"
+                                   value="@Model.NumeroTarjeta" />
+                        </div>
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest px-1">Tipo de Tarjeta</label>
+                            <select disabled
+                                    id="editTipoTarjeta" name="TipoTarjeta"
+                                    class="profile-select appearance-none w-full bg-slate-50 dark:bg-slate-900/30 border border-transparent focus:border-primary focus:bg-white dark:focus:bg-slate-900/80 rounded-lg px-4 py-3 text-slate-900 dark:text-slate-100 outline-none transition-all">
+                                <option value="">Seleccione</option>
+                                @foreach (var tipo in tiposTarjeta)
+                                {
+                                    <option value="@tipo" selected="@(!string.IsNullOrEmpty(Model.TipoTarjeta) && Model.TipoTarjeta == tipo)">
+                                        @tipo
+                                    </option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Section 3: Security -->
+                <section class="space-y-6 bg-white dark:bg-surface-dark p-8 rounded-2xl shadow-sm border border-slate-100 dark:border-accent-dark">
+                    <div class="flex items-center gap-2 border-b border-primary/10 pb-4">
+                        <span class="material-symbols-outlined text-primary">security</span>
+                        <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Seguridad</h2>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest px-1">Contraseña Actual *</label>
+                            <input readonly
+                                   class="profile-input w-full bg-slate-50 dark:bg-slate-900/30 border border-transparent focus:border-primary focus:bg-white dark:focus:bg-slate-900/80 rounded-lg px-4 py-3 text-slate-900 dark:text-slate-100 outline-none transition-all"
+                                   type="password"
+                                   placeholder="Ingresa tu clave de cuenta"
+                                   id="editPasswordActual" name="PasswordActual" />
+                        </div>
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest px-1">Nueva Contraseña</label>
+                            <input readonly
+                                   class="profile-input w-full bg-slate-50 dark:bg-slate-900/30 border border-transparent focus:border-primary focus:bg-white dark:focus:bg-slate-900/80 rounded-lg px-4 py-3 text-slate-900 dark:text-slate-100 outline-none transition-all"
+                                   placeholder="Déjalo vacío si no cambia"
+                                   type="password"
+                                   id="editPasswordNueva" name="PasswordNueva" />
+                        </div>
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest px-1">Confirmar Nueva Contraseña</label>
+                            <input readonly
+                                   class="profile-input w-full bg-slate-50 dark:bg-slate-900/30 border border-transparent focus:border-primary focus:bg-white dark:focus:bg-slate-900/80 rounded-lg px-4 py-3 text-slate-900 dark:text-slate-100 outline-none transition-all"
+                                   placeholder="Repite la contraseña"
+                                   type="password"
+                                   id="editPasswordConfirmar" name="PasswordConfirmar" />
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Section 4: Notification Preferences -->
+                <section class="space-y-6 bg-white dark:bg-surface-dark p-8 rounded-2xl shadow-sm border border-slate-100 dark:border-accent-dark">
+                    <div class="flex items-center gap-2 border-b border-primary/10 pb-4">
+                        <span class="material-symbols-outlined text-primary">notifications</span>
+                        <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Preferencias de Notificación</h2>
+                    </div>
+                    <div class="space-y-4">
+                        <label class="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-900/30 border border-transparent hover:border-primary/20 rounded-xl cursor-pointer transition-colors">
+                            <div class="flex gap-4 items-center">
+                                <span class="material-symbols-outlined text-slate-400">mail</span>
+                                <div>
+                                    <p class="font-bold text-sm text-slate-900 dark:text-slate-100">Notificaciones por Email</p>
+                                    <p class="text-xs text-slate-500 dark:text-slate-400">Recibe confirmaciones de reserva y ofertas exclusivas</p>
+                                </div>
+                            </div>
+                            <input checked class="w-5 h-5 rounded border-primary/50 bg-transparent text-primary focus:ring-primary profile-input cursor-pointer" type="checkbox" />
+                        </label>
+                    </div>
+                </section>
+
+                <!-- Actions Container (Hidden initially) -->
+                <div id="updateActions" class="hidden fixed bottom-0 left-0 right-0 p-4 bg-white/90 dark:bg-surface-dark/90 backdrop-blur-md border-t border-slate-200 dark:border-accent-dark z-40 transform translate-y-0 transition-transform duration-300">
+                    <div class="max-w-4xl mx-auto flex items-center justify-between">
+                        <p class="text-xs font-bold text-slate-500 uppercase tracking-widest hidden sm:block">Modo Edición Activo</p>
+                        <div class="flex items-center gap-4 w-full sm:w-auto justify-end">
+                            <button type="button" id="btnDiscard" class="px-6 py-3 text-sm font-bold text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors uppercase tracking-widest">
+                                Descartar
+                            </button>
+                            <button type="submit" class="bg-primary text-white px-8 py-3 rounded-xl text-sm font-bold shadow-lg shadow-primary/20 hover:scale-105 active:scale-95 transition-all uppercase tracking-widest">
+                                Guardar Cambios
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+
+        <footer class="mt-20 py-8 border-t border-slate-200 dark:border-primary/10 text-center mb-16">
+            <p class="text-slate-400 dark:text-slate-500 text-xs font-medium">Atelier 27 © 2024 - Experiencia Gastronómica de Lujo</p>
+        </footer>
+    </div>
+</main>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Evaluacion de Modales de Backend (TempData)
+            const hasSuccess = "@(TempData["Success"] != null ? "True" : "False")" === "True";
+            const hasError = "@(TempData["Error"] != null ? "True" : "False")" === "True";
+
+            if (hasSuccess) {
+                document.getElementById('profileSuccessModal').classList.remove('hidden');
+            } else if (hasError) {
+                document.getElementById('profileFailModal').classList.remove('hidden');
+            }
+
+            // Lógica de Desbloqueo del Formulario
+            const btnToggleEdit = document.getElementById('btnToggleEdit');
+            const btnDiscard = document.getElementById('btnDiscard');
+            const updateActions = document.getElementById('updateActions');
+            const profileInputs = document.querySelectorAll('.profile-input');
+            const profileSelects = document.querySelectorAll('.profile-select');
+            
+            function enableEditMode() {
+                // Inputs de texto
+                profileInputs.forEach(input => {
+                    input.removeAttribute('readonly');
+                    input.classList.remove('border-transparent', 'bg-slate-50', 'dark:bg-slate-900/30');
+                    input.classList.add('border-primary/50', 'bg-white', 'dark:bg-slate-800', 'shadow-inner');
+                });
+                
+                // Selects (Select usa disabled nativo para simular readonly real)
+                profileSelects.forEach(select => {
+                    select.removeAttribute('disabled');
+                    select.classList.remove('border-transparent', 'bg-slate-50', 'dark:bg-slate-900/30');
+                    select.classList.add('border-primary/50', 'bg-white', 'dark:bg-slate-800', 'shadow-inner');
+                });
+
+                // Focus y Action Bar
+                document.getElementById('editNombreCompleto').focus();
+                updateActions.classList.remove('hidden');
+                
+                // Toggle Button visual
+                btnToggleEdit.innerHTML = `<span class="material-symbols-outlined text-[16px]">lock_open</span> Editando`;
+                btnToggleEdit.classList.add('bg-primary/20', 'text-primary');
+            }
+
+            function revertEditMode() {
+                // Return to Readonly/Disabled
+                profileInputs.forEach(input => {
+                    input.setAttribute('readonly', true);
+                    input.classList.add('border-transparent', 'bg-slate-50', 'dark:bg-slate-900/30');
+                    input.classList.remove('border-primary/50', 'bg-white', 'dark:bg-slate-800', 'shadow-inner');
+                });
+                
+                profileSelects.forEach(select => {
+                    select.setAttribute('disabled', true);
+                    select.classList.add('border-transparent', 'bg-slate-50', 'dark:bg-slate-900/30');
+                    select.classList.remove('border-primary/50', 'bg-white', 'dark:bg-slate-800', 'shadow-inner');
+                });
+
+                // Clear passwords on discard
+                document.getElementById('editPasswordActual').value = '';
+                document.getElementById('editPasswordNueva').value = '';
+                document.getElementById('editPasswordConfirmar').value = '';
+
+                updateActions.classList.add('hidden');
+                
+                btnToggleEdit.innerHTML = `<span class="material-symbols-outlined text-[16px]">edit</span> Desbloquear`;
+                btnToggleEdit.classList.remove('bg-primary/20', 'text-primary');
+            }
+
+            btnToggleEdit.addEventListener('click', enableEditMode);
+            btnDiscard.addEventListener('click', revertEditMode);
+        });
+    </script>
+}

@@ -1,0 +1,201 @@
+@model IEnumerable<ProyectoFinalGrupo3.Models.Producto>
+@{
+    Layout = "~/Views/Shared/_CustomLayoutPublic.cshtml";
+    ViewData["Title"] = "CreateUserOrder";
+}
+
+<main class="flex flex-col ">
+    <!-- Header -->
+    <header class="sticky top-0 z-30 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-primary/10 px-6 py-4">
+        <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+            <div class="flex-1 max-w-xl">
+                <div class="relative group">
+                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors">search</span>
+                    <input id="searchInput" class="w-full bg-slate-100 dark:bg-white/5 border-none rounded-lg py-2.5 pl-10 pr-4 text-sm focus:ring-1 focus:ring-primary transition-all text-slate-900 dark:text-white placeholder:text-slate-500 dark:placeholder:text-slate-400" placeholder="Buscar platillos por nombre o ingrediente..." type="text" />
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- Categories Horizontal Scroll -->
+    <section class="px-6 py-6 overflow-hidden">
+        <div class="max-w-7xl mx-auto">
+            <div id="categoryFilters" class="flex items-center gap-3 overflow-x-auto hide-scrollbar pb-2">
+                <button data-cat="all" class="whitespace-nowrap px-6 py-2 rounded-full bg-primary text-background-dark text-sm font-bold shadow-md transition-colors filter-btn">Todas</button>
+                @if(ViewBag.Categorias != null)
+                {
+                    foreach (var cat in ViewBag.Categorias)
+                    {
+                        <button data-cat="@cat.Descripcion" class="whitespace-nowrap px-6 py-2 rounded-full bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-slate-300 text-sm font-medium hover:bg-primary/20 hover:text-primary transition-colors border border-transparent dark:border-primary/10 filter-btn">@cat.Descripcion</button>
+                    }
+                }
+            </div>
+        </div>
+    </section>
+    <!-- Product Grid -->
+    <section class="px-6 pb-24">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                @foreach (var producto in Model)
+                {
+                    <!-- Card -->
+                    <div class="product-card group bg-white dark:bg-white/5 rounded-xl overflow-hidden border border-slate-200 dark:border-primary/10 hover:border-primary/30 transition-all duration-300" data-name="@producto.Nombre.ToLower()" data-category="@producto.CodigoCategoriaNavigation?.Descripcion">
+                        <div class="aspect-[4/3] overflow-hidden">
+                            <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                                 src="@producto.UrlImagen"
+                                 alt="@producto.Nombre" />
+                        </div>
+                        <div class="p-5 flex flex-col gap-2">
+                            <div class="flex justify-between items-start">
+                                <h3 class="font-semibold text-lg text-slate-900 dark:text-white">@producto.Nombre</h3>
+                                <span class="text-primary font-bold">$@producto.Precio</span>
+                            </div>
+                            <p class="text-sm text-slate-500 dark:text-slate-400 line-clamp-2">Categoría: @(producto.CodigoCategoriaNavigation?.Descripcion ?? "General")</p>
+                            
+                            <div class="flex items-center gap-2 mt-4">
+                                <select class="qty-select w-20 py-2.5 bg-slate-100 dark:bg-background-dark border border-slate-200 dark:border-primary/20 rounded-lg text-sm text-center font-semibold text-slate-700 dark:text-slate-200 focus:ring-1 focus:ring-primary focus:border-primary outline-none">
+                                    @for(int i=1; i<=10; i++)
+                                    {
+                                        <option value="@i">@i</option>
+                                    }
+                                </select>
+                                <button type="button" onclick="addToCartAjax(@producto.CodigoProducto, this)" class="flex-1 py-2.5 bg-primary text-background-dark rounded-lg font-bold text-sm flex items-center justify-center gap-2 hover:brightness-110 transition-all">
+                                    <span class="material-symbols-outlined text-sm font-bold block-icon">add_shopping_cart</span>
+                                    <span class="block-text">Añadir</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+    <!-- Floating Action Button / Cart Summary -->
+    <div class="fixed bottom-6 right-6 lg:right-10 z-50">
+        <a asp-controller="Orders" asp-action="CartUserOrder"
+           class="bg-primary hover:brightness-110 text-background-dark px-6 py-4 rounded-full shadow-2xl flex items-center gap-4 group transition-all transform hover:scale-105 active:scale-95">
+            <div class="flex flex-col items-start leading-none">
+                <span class="text-[10px] uppercase font-black opacity-80">Tu pedido</span>
+                <span class="text-lg font-black">Ver Carrito (<span id="cartCountLabel">@(ViewBag.CartCount ?? 0)</span>)</span>
+            </div>
+            <div class="h-8 w-px bg-background-dark/20"></div>
+            <span class="material-symbols-outlined font-bold group-hover:translate-x-1 transition-transform">arrow_forward_ios</span>
+        </a>
+    </div>
+    
+    <!-- Floating Back Button -->
+    <div class="fixed bottom-6 left-6 lg:left-10 z-50">
+        <button type="button" onclick="cancelOrderAndReturn()"
+           class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-primary/20 hover:border-red-500/50 text-slate-700 dark:text-slate-200 hover:text-red-600 dark:hover:text-red-400 px-5 sm:px-6 py-4 rounded-full shadow-2xl flex items-center gap-3 group transition-all transform hover:scale-105 active:scale-95">
+            <span class="material-symbols-outlined font-bold group-hover:-translate-x-1 transition-transform">arrow_back</span>
+            <div class="flex flex-col items-start leading-none hidden sm:flex">
+                <span class="text-[10px] uppercase font-black opacity-50 dark:opacity-70">Cancelar y</span>
+                <span class="text-sm font-black">Regresar al Inicio</span>
+            </div>
+        </button>
+    </div>
+</main>
+
+@section Scripts {
+    <script>
+        const searchInput = document.getElementById('searchInput');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const productCards = document.querySelectorAll('.product-card');
+        const cartCountLabel = document.getElementById('cartCountLabel');
+        
+        let currentCategory = 'all';
+
+        function filterProducts() {
+            const searchTerm = searchInput.value.toLowerCase();
+
+            productCards.forEach(card => {
+                const name = card.getAttribute('data-name') || "";
+                const cat = card.getAttribute('data-category') || "";
+
+                const matchesSearch = name.includes(searchTerm);
+                const matchesCategory = (currentCategory === 'all' || cat === currentCategory);
+
+                if (matchesSearch && matchesCategory) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        searchInput.addEventListener('input', filterProducts);
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                filterBtns.forEach(b => {
+                    b.classList.remove('bg-primary', 'text-background-dark', 'shadow-md');
+                    b.classList.add('bg-slate-100', 'text-slate-600', 'dark:bg-white/5', 'dark:text-slate-300');
+                });
+
+                e.currentTarget.classList.remove('bg-slate-100', 'text-slate-600', 'dark:bg-white/5', 'dark:text-slate-300');
+                e.currentTarget.classList.add('bg-primary', 'text-background-dark', 'shadow-md');
+
+                currentCategory = e.currentTarget.getAttribute('data-cat');
+                filterProducts();
+            });
+        });
+
+        async function addToCartAjax(id, btnElement) {
+            const selectEl = btnElement.previousElementSibling;
+            const cantidad = parseInt(selectEl.value);
+
+            try {
+                const response = await fetch('@Url.Action("AgregarAlCarritoAjax", "Orders")', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ id: id, cantidad: cantidad })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.success) {
+                        cartCountLabel.textContent = data.cartCount;
+
+                        const originalHtml = btnElement.innerHTML;
+                        btnElement.innerHTML = `<span class="material-symbols-outlined text-sm font-bold">check</span> Añadido`;
+                        btnElement.classList.add('bg-green-500', 'text-white');
+                        btnElement.classList.remove('bg-primary', 'text-background-dark');
+
+                        selectEl.value = '1';
+
+                        setTimeout(() => {
+                            btnElement.innerHTML = originalHtml;
+                            btnElement.classList.remove('bg-green-500', 'text-white');
+                            btnElement.classList.add('bg-primary', 'text-background-dark');
+                        }, 2000);
+                    } else {
+                        alert("Error: " + data.message);
+                    }
+                } else {
+                    alert("Error en el servidor al intentar añadir al carrito.");
+                }
+            } catch (error) {
+                console.error('Fetch error:', error);
+                alert("Error de conexión al añadir al carrito.");
+            }
+        }
+
+        async function cancelOrderAndReturn() {
+            try {
+                // Llama al endpoint AJAX unificado creado hace unas horas 
+                // para vaciar el carrito ('clear') sin recargar la página.
+                await fetch('@Url.Action("UpdateCartItemAjax", "Orders")', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: 0, action: 'clear' })
+                });
+            } catch (e) {
+                console.warn("Fallo silencioso vaciando carrito de retorno:", e);
+            } finally {
+                // Redirige
+                window.location.href = '@Url.Action("HomeUser", "Users")';
+            }
+        }
+    </script>
+}

@@ -1,0 +1,170 @@
+@{
+    Layout = "~/Views/Shared/_CustomLayout.cshtml";
+}
+<body class="bg-background text-on-surface min-h-screen">
+    <!-- Top Navigation Shell -->
+    <nav class="fixed top-0 w-full z-50 bg-[#221D10]/80 backdrop-blur-md border-b border-[#B7860B]/10 flex justify-between items-center px-6 py-4 w-full shadow-sm">
+        <div class="text-lg font-bold tracking-widest text-[#B7860B] uppercase">Atelier 27</div>
+        <div class="flex items-center gap-6">
+            <span class="material-symbols-outlined text-[#B7860B] cursor-pointer hover:scale-110 transition-all" data-icon="shopping_bag">shopping_bag</span>
+        </div>
+    </nav>
+    <!-- Main Content Canvas -->
+    <main class="pt-24 pb-32 px-4 md:px-12 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12">
+        <!-- Payment Journey Container -->
+        <div class="lg:col-span-8 space-y-10">
+            <!-- Progress Stepper -->
+            <div class="flex items-center justify-between max-w-md mx-auto mb-12">
+                <div class="flex flex-col items-center gap-2">
+                    <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-background font-bold text-sm">1</div>
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-primary">Carrito</span>
+                </div>
+                <div class="flex-1 h-[1px] bg-primary-container mx-4 mt-[-18px]"></div>
+                <div class="flex flex-col items-center gap-2">
+                    <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-background font-bold text-sm">2</div>
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-primary">Datos</span>
+                </div>
+                <div class="flex-1 h-[1px] bg-primary mx-4 mt-[-18px]"></div>
+                <div class="flex flex-col items-center gap-2">
+                    <div class="w-8 h-8 rounded-full bg-primary ring-4 ring-primary-container flex items-center justify-center text-background font-bold text-sm">3</div>
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-primary">Pago</span>
+                </div>
+            </div>
+            <!-- Payment Method Selection -->
+            <section class="space-y-6">
+                <h2 class="text-lg font-bold tracking-tight uppercase text-on-surface">Método de Pago</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- Option 1: Credit Card -->
+                    <label class="relative cursor-pointer group">
+                        <input checked="" class="peer sr-only" name="payment_method" type="radio" />
+                        <div class="p-6 rounded-xl border border-outline bg-surface-container transition-all peer-checked:border-primary peer-checked:bg-primary-container group-hover:bg-surface-container-high">
+                            <span class="material-symbols-outlined text-primary mb-3 block" data-icon="credit_card">credit_card</span>
+                            <div class="text-xs font-bold uppercase tracking-tight">Tarjeta de Crédito</div>
+                        </div>
+                    </label>
+                    <!-- Option 2: PayPal -->
+                    <label class="relative cursor-pointer group">
+                        <input class="peer sr-only" name="payment_method" type="radio" />
+                        <div class="p-6 rounded-xl border border-outline bg-surface-container transition-all peer-checked:border-primary peer-checked:bg-primary-container group-hover:bg-surface-container-high">
+                            <span class="material-symbols-outlined text-primary mb-3 block" data-icon="account_balance_wallet">account_balance_wallet</span>
+                            <div class="text-xs font-bold uppercase tracking-tight">PayPal</div>
+                        </div>
+                    </label>
+                    <!-- Option 3: Cash -->
+                    <label class="relative cursor-pointer group">
+                        <input class="peer sr-only" name="payment_method" type="radio" />
+                        <div class="p-6 rounded-xl border border-outline bg-surface-container transition-all peer-checked:border-primary peer-checked:bg-primary-container group-hover:bg-surface-container-high">
+                            <span class="material-symbols-outlined text-primary mb-3 block" data-icon="payments">payments</span>
+                            <div class="text-xs font-bold uppercase tracking-tight">Efectivo</div>
+                        </div>
+                    </label>
+                </div>
+            </section>
+            <!-- Credit Card Form -->
+            <section class="bg-surface-container-low border border-outline-variant rounded-2xl p-8 space-y-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="flex flex-col gap-2">
+                        <label class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Número de Tarjeta</label>
+                        <div class="relative">
+                            <input class="w-full bg-surface-container border-none text-on-surface rounded-lg px-4 py-3 focus:ring-1 focus:ring-primary" readonly="" type="text" value="**** **** **** 4291" />
+                            <span class="absolute right-4 top-1/2 -translate-y-1/2 text-primary material-symbols-outlined" data-icon="lock" style="font-variation-settings: 'FILL' 1;">lock</span>
+                        </div>
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <label class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Nombre en la Tarjeta</label>
+                        <input class="w-full bg-surface-container border-none text-on-surface rounded-lg px-4 py-3 focus:ring-1 focus:ring-primary" placeholder="EJ. JULIÁN ALCARAZ" type="text" />
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <label class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Fecha de Vencimiento</label>
+                        <input class="w-full bg-surface-container border-none text-on-surface rounded-lg px-4 py-3 focus:ring-1 focus:ring-primary" placeholder="MM/YY" type="text" />
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <label class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">CVV</label>
+                        <input class="w-full bg-surface-container border-none text-on-surface rounded-lg px-4 py-3 focus:ring-1 focus:ring-primary" placeholder="***" type="password" />
+                    </div>
+                </div>
+                <div class="flex items-center gap-3 py-4 border-t border-outline-variant">
+                    <input checked="" class="rounded border-primary-container bg-surface-container text-primary focus:ring-primary" type="checkbox" />
+                    <span class="text-xs text-on-surface-variant">Guardar información de pago para futuras visitas.</span>
+                </div>
+            </section>
+        </div>
+        <!-- Order Summary Sidebar -->
+        <aside class="lg:col-span-4">
+            <div class="bg-surface-container border border-outline-variant rounded-2xl p-6 sticky top-28 shadow-2xl overflow-hidden">
+                <!-- Visual Accent -->
+                <div class="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl -mr-16 -mt-16"></div>
+                <h3 class="text-md font-bold uppercase tracking-wider mb-6 pb-4 border-b border-outline-variant">Resumen del Pedido</h3>
+                <div class="space-y-4 mb-8">
+                    <div class="flex justify-between items-start">
+                        <div class="flex flex-col">
+                            <span class="text-sm font-medium">Solomillo de Ternera al Oro</span>
+                            <span class="text-[10px] text-on-surface-variant uppercase">Cant: 1</span>
+                        </div>
+                        <span class="text-sm font-bold text-primary">€48.00</span>
+                    </div>
+                    <div class="flex justify-between items-start">
+                        <div class="flex flex-col">
+                            <span class="text-sm font-medium">Trufa Negra Seleccionada</span>
+                            <span class="text-[10px] text-on-surface-variant uppercase">Cant: 1</span>
+                        </div>
+                        <span class="text-sm font-bold text-primary">€12.00</span>
+                    </div>
+                    <div class="flex justify-between items-start">
+                        <div class="flex flex-col">
+                            <span class="text-sm font-medium">Vino Tinto Reserva Atelier</span>
+                            <span class="text-[10px] text-on-surface-variant uppercase">Cant: 2</span>
+                        </div>
+                        <span class="text-sm font-bold text-primary">€34.00</span>
+                    </div>
+                </div>
+                <div class="space-y-3 pt-4 border-t border-outline-variant">
+                    <div class="flex justify-between text-xs">
+                        <span class="text-on-surface-variant uppercase tracking-tighter">Subtotal</span>
+                        <span class="font-medium">€94.00</span>
+                    </div>
+                    <div class="flex justify-between text-xs">
+                        <span class="text-on-surface-variant uppercase tracking-tighter">IVA (10%)</span>
+                        <span class="font-medium">€9.40</span>
+                    </div>
+                    <div class="flex justify-between items-center pt-4">
+                        <span class="text-sm font-black uppercase tracking-widest">Total</span>
+                        <span class="text-xl font-black text-primary">€103.40</span>
+                    </div>
+                </div>
+                <button class="w-full mt-8 bg-primary text-background py-4 rounded-xl font-bold uppercase tracking-[0.2em] shadow-lg hover:brightness-110 active:scale-95 transition-all">
+                    Finalizar Pedido
+                </button>
+                <div class="mt-6 flex items-center justify-center gap-2 text-[10px] text-on-surface-variant uppercase tracking-widest">
+                    <span class="material-symbols-outlined text-[14px]" data-icon="verified_user">verified_user</span>
+                    Pago Seguro Encriptado
+                </div>
+            </div>
+            <!-- Support / Info -->
+            <div class="mt-6 p-4 rounded-xl bg-primary-container/30 border border-primary/10">
+                <p class="text-[11px] leading-relaxed text-on-secondary-container">
+                    Al confirmar tu pedido, aceptas los <a class="underline font-bold" href="#">términos de servicio</a> y las políticas de cancelación de Atelier 27.
+                </p>
+            </div>
+        </aside>
+    </main>
+    <!-- Bottom Navigation Shell (Mobile Only) -->
+    <nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-3 bg-[#221D10]/90 backdrop-blur-lg border-t border-[#B7860B]/20 rounded-t-2xl shadow-[0_-4px_20px_rgba(183,134,11,0.15)]">
+        <div class="flex flex-col items-center justify-center text-[#B7860B]/50 px-4 py-1 transition-all">
+            <span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+            <span class="font-['Work_Sans'] text-[10px] font-bold uppercase tracking-tighter">Menu</span>
+        </div>
+        <div class="flex flex-col items-center justify-center text-[#B7860B]/50 px-4 py-1 transition-all">
+            <span class="material-symbols-outlined" data-icon="shopping_cart">shopping_cart</span>
+            <span class="font-['Work_Sans'] text-[10px] font-bold uppercase tracking-tighter">Cart</span>
+        </div>
+        <div class="flex flex-col items-center justify-center text-[#B7860B]/50 px-4 py-1 transition-all">
+            <span class="material-symbols-outlined" data-icon="person_edit">person_edit</span>
+            <span class="font-['Work_Sans'] text-[10px] font-bold uppercase tracking-tighter">Data</span>
+        </div>
+        <div class="flex flex-col items-center justify-center bg-[#B7860B] text-[#221D10] rounded-xl px-4 py-1 scale-110 duration-200">
+            <span class="material-symbols-outlined" data-icon="payments">payments</span>
+            <span class="font-['Work_Sans'] text-[10px] font-bold uppercase tracking-tighter">Pay</span>
+        </div>
+    </nav>
+</body>

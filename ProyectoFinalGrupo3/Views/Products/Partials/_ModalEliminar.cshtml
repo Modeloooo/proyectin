@@ -1,0 +1,22 @@
+﻿<div id="modalEliminar" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0a0805]/80 backdrop-blur-sm hidden">
+    <div class="bg-white dark:bg-[#1a160d] w-full max-w-md rounded-xl p-6 text-center">
+        <h2 class="text-xl font-bold mb-4 text-red-500">¿Eliminar categoría?</h2>
+        <p class="text-sm text-slate-500 mb-6">Esta acción no se puede deshacer</p>
+
+        <form id="formEliminar" method="post" asp-action="Eliminar">
+            <input type="hidden" name="id" id="idEliminar" />
+
+            <div class="flex justify-center gap-4">
+                <button type="button" id="cancelarEliminar"
+                        class="px-4 py-2 bg-gray-300 rounded">
+                    Cancelar
+                </button>
+
+                <button type="submit"
+                        class="px-4 py-2 bg-red-500 text-white rounded">
+                    Eliminar
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

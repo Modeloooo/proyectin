@@ -1,0 +1,110 @@
+﻿@{
+    var perfiles = new List<string> { "Administrador", "Usuario" };
+    var generos = new List<string> { "Masculino", "Femenino", "Otro" };
+    var tiposTarjeta = new List<string> { "Visa", "MasterCard", "American Express" };
+}
+
+<div id="modalEditar" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0a0805]/80 backdrop-blur-sm hidden">
+    <div class="bg-background-light dark:bg-[#1a160d] w-full max-w-4xl rounded-2xl border border-primary/20 shadow-2xl overflow-hidden">
+        <div class="px-8 py-6 border-b border-primary/10 flex items-center justify-between">
+            <div>
+                <h2 class="text-2xl font-black text-primary tracking-tight">Editar Usuario</h2>
+                <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">
+                    Modifica la información del usuario seleccionado.
+                </p>
+            </div>
+            <button id="cerrarEditar" type="button" class="size-10 flex items-center justify-center rounded-full hover:bg-primary/10 text-slate-400 transition-colors">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+
+        <form asp-controller="Users" asp-action="Editar" method="post">
+            <div class="p-8 space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-2">
+                        <label class="text-sm font-bold text-slate-700 dark:text-slate-300 px-1">Identificación</label>
+                        <input type="text" id="editIdentificacion" name="Identificacion"
+                               class="w-full bg-slate-200 dark:bg-primary/10 border border-primary/20 rounded-xl px-4 py-3 text-sm outline-none"
+                               readonly />
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="text-sm font-bold text-slate-700 dark:text-slate-300 px-1">Nombre completo</label>
+                        <input type="text" id="editNombreCompleto" name="NombreCompleto"
+                               class="w-full bg-slate-100 dark:bg-primary/5 border border-primary/20 rounded-xl px-4 py-3 text-sm outline-none"
+                               required />
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="text-sm font-bold text-slate-700 dark:text-slate-300 px-1">Género</label>
+                        <select id="editGenero" name="Genero"
+                                class="w-full bg-slate-100 dark:bg-primary/5 border border-primary/20 rounded-xl px-4 py-3 text-sm outline-none">
+                            <option value="">Seleccione</option>
+                            @foreach (var genero in generos)
+                            {
+                                <option value="@genero">@genero</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="text-sm font-bold text-slate-700 dark:text-slate-300 px-1">Correo</label>
+                        <input type="email" id="editCorreo" name="Correo"
+                               class="w-full bg-slate-100 dark:bg-primary/5 border border-primary/20 rounded-xl px-4 py-3 text-sm outline-none"
+                               required />
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="text-sm font-bold text-slate-700 dark:text-slate-300 px-1">Tipo de tarjeta</label>
+                        <select id="editTipoTarjeta" name="TipoTarjeta"
+                                class="w-full bg-slate-100 dark:bg-primary/5 border border-primary/20 rounded-xl px-4 py-3 text-sm outline-none">
+                            <option value="">Seleccione</option>
+                            @foreach (var tipo in tiposTarjeta)
+                            {
+                                <option value="@tipo">@tipo</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="text-sm font-bold text-slate-700 dark:text-slate-300 px-1">Número de tarjeta</label>
+                        <input type="text" id="editNumeroTarjeta" name="NumeroTarjeta"
+                               class="w-full bg-slate-100 dark:bg-primary/5 border border-primary/20 rounded-xl px-4 py-3 text-sm outline-none" />
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="text-sm font-bold text-slate-700 dark:text-slate-300 px-1">Contraseña</label>
+                        <input type="password" id="editContrasena" name="Contrasena"
+                               class="w-full bg-slate-100 dark:bg-primary/5 border border-primary/20 rounded-xl px-4 py-3 text-sm outline-none"
+                               placeholder="Déjela vacía para no cambiarla" />
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="text-sm font-bold text-slate-700 dark:text-slate-300 px-1">Perfil</label>
+                        <select id="editPerfil" name="Perfil"
+                                class="w-full bg-slate-100 dark:bg-primary/5 border border-primary/20 rounded-xl px-4 py-3 text-sm outline-none">
+                            @foreach (var perfil in perfiles)
+                            {
+                                <option value="@perfil">@perfil</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-8 py-6 bg-slate-50 dark:bg-primary/5 border-t border-primary/10 flex items-center justify-end gap-4">
+                <button id="cancelarEditar"
+                        type="button"
+                        class="px-6 py-2.5 text-sm font-bold text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 transition-colors">
+                    Cancelar
+                </button>
+
+                <button type="submit"
+                        class="px-8 py-2.5 bg-primary text-white rounded-xl font-bold text-sm shadow-lg shadow-primary/20 hover:bg-primary/90 transition-all flex items-center gap-2">
+                    <span class="material-symbols-outlined text-lg">save</span>
+                    Guardar Cambios
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

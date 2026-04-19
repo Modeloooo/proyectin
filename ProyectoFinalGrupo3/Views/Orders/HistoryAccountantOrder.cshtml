@@ -1,0 +1,198 @@
+﻿@{
+    Layout = "~/Views/Shared/_CustomLayout.cshtml";
+    ViewData["Title"] = "HistoryAccountantOrder";
+}
+<main class="flex-1 flex flex-col p-8 overflow-y-auto">
+    <header class="mb-8 flex justify-between items-end">
+        <div>
+            <h2 class="text-3xl font-black text-slate-900 dark:text-slate-100 tracking-tight">Historial de Compras</h2>
+            <p class="text-slate-500 dark:text-slate-400 mt-1">Gestión y revisión integral de transacciones recientes.</p>
+        </div>
+        <div class="flex gap-4">
+            <button class="flex items-center gap-2 bg-primary/10 text-primary border border-primary/20 px-4 py-2 rounded-lg font-medium hover:bg-primary/20 transition-all">
+                <span class="material-symbols-outlined text-sm">download</span>
+                Exportar PDF
+            </button>
+            <button class="flex items-center gap-2 bg-primary text-background-dark px-4 py-2 rounded-lg font-bold hover:brightness-110 transition-all shadow-lg shadow-primary/20">
+                <span class="material-symbols-outlined text-sm">add</span>
+                Nueva Venta
+            </button>
+        </div>
+    </header>
+    <!-- Filters Section -->
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 bg-surface-dark/40 p-6 rounded-xl border border-primary/10">
+        <div class="space-y-2">
+            <label class="text-xs font-bold uppercase tracking-wider text-primary/80 px-1">Buscar Cliente</label>
+            <div class="relative">
+                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+                <input class="w-full bg-background-dark/50 border-primary/20 rounded-lg pl-10 text-slate-100 focus:ring-primary focus:border-primary" placeholder="ID, Usuario o Nombre..." type="text" />
+            </div>
+        </div>
+        <div class="space-y-2">
+            <label class="text-xs font-bold uppercase tracking-wider text-primary/80 px-1">Rango de Fecha</label>
+            <div class="relative">
+                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">calendar_month</span>
+                <input class="w-full bg-background-dark/50 border-primary/20 rounded-lg pl-10 text-slate-100 focus:ring-primary focus:border-primary" type="text" value="Oct 20, 2023 - Oct 27, 2023" />
+            </div>
+        </div>
+        <div class="space-y-2">
+            <label class="text-xs font-bold uppercase tracking-wider text-primary/80 px-1">Estado de Transacción</label>
+            <select class="w-full bg-background-dark/50 border-primary/20 rounded-lg text-slate-100 focus:ring-primary focus:border-primary">
+                <option>Todos los estados</option>
+                <option>Completado</option>
+                <option>Pendiente</option>
+                <option>Reembolsado</option>
+            </select>
+        </div>
+    </section>
+    <!-- Transactions Table -->
+    <section class="bg-surface-dark/20 border border-primary/10 rounded-xl overflow-hidden shadow-2xl">
+        <table class="w-full text-left border-collapse">
+            <thead>
+                <tr class="bg-primary/5 text-primary uppercase text-[11px] font-bold tracking-[0.1em] border-b border-primary/10">
+                    <th class="px-6 py-4">Orden ID</th>
+                    <th class="px-6 py-4">Cliente</th>
+                    <th class="px-6 py-4">Fecha &amp; Hora</th>
+                    <th class="px-6 py-4">Monto Total</th>
+                    <th class="px-6 py-4">Estado</th>
+                    <th class="px-6 py-4 text-right">Acciones</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-primary/5">
+                <!-- Row 1: Recent, Reversable -->
+                <tr class="hover:bg-primary/5 transition-colors group">
+                    <td class="px-6 py-5 font-mono text-sm text-slate-400">#AT-90241</td>
+                    <td class="px-6 py-5">
+                        <div class="flex items-center gap-3">
+                            <div class="size-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-xs border border-primary/30">JS</div>
+                            <span class="font-medium">Julianna Silva</span>
+                        </div>
+                    </td>
+                    <td class="px-6 py-5 text-sm text-slate-400">Hoy, 14:20</td>
+                    <td class="px-6 py-5 font-bold text-slate-100">$1,240.00</td>
+                    <td class="px-6 py-5">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
+                            COMPLETADO
+                        </span>
+                    </td>
+                    <td class="px-6 py-5 text-right">
+                        <button class="bg-red-500 text-white text-[10px] font-black uppercase px-3 py-1.5 rounded hover:bg-red-600 transition-all tracking-wider flex items-center gap-1 ml-auto">
+                            <span class="material-symbols-outlined text-sm">history_toggle_off</span>
+                            Reversar Venta
+                        </button>
+                    </td>
+                </tr>
+                <!-- Row 2: Older, Non-reversable -->
+                <tr class="hover:bg-primary/5 transition-colors group">
+                    <td class="px-6 py-5 font-mono text-sm text-slate-400">#AT-90238</td>
+                    <td class="px-6 py-5">
+                        <div class="flex items-center gap-3">
+                            <div class="size-8 rounded-full bg-slate-700 flex items-center justify-center text-slate-300 font-bold text-xs">MA</div>
+                            <span class="font-medium">Marco Aurelio</span>
+                        </div>
+                    </td>
+                    <td class="px-6 py-5 text-sm text-slate-400">Ayer, 09:15</td>
+                    <td class="px-6 py-5 font-bold text-slate-100">$850.50</td>
+                    <td class="px-6 py-5">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
+                            COMPLETADO
+                        </span>
+                    </td>
+                    <td class="px-6 py-5 text-right">
+                        <button class="bg-slate-700/50 text-slate-500 text-[10px] font-black uppercase px-3 py-1.5 rounded cursor-not-allowed tracking-wider flex items-center gap-1 ml-auto" disabled="">
+                            <span class="material-symbols-outlined text-sm">lock</span>
+                            No Reversable
+                        </button>
+                    </td>
+                </tr>
+                <!-- Row 3: Refunded -->
+                <tr class="hover:bg-primary/5 transition-colors group bg-red-500/5">
+                    <td class="px-6 py-5 font-mono text-sm text-slate-400">#AT-90235</td>
+                    <td class="px-6 py-5">
+                        <div class="flex items-center gap-3">
+                            <div class="size-8 rounded-full bg-slate-700 flex items-center justify-center text-slate-300 font-bold text-xs">ER</div>
+                            <span class="font-medium">Elena Rossi</span>
+                        </div>
+                    </td>
+                    <td class="px-6 py-5 text-sm text-slate-400">22 Oct, 18:30</td>
+                    <td class="px-6 py-5 font-bold text-slate-100">$2,100.00</td>
+                    <td class="px-6 py-5">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-slate-500/10 text-slate-400 border border-slate-500/20">
+                            REEMBOLSADO
+                        </span>
+                    </td>
+                    <td class="px-6 py-5 text-right">
+                        <button class="text-primary hover:text-accent-gold p-2 transition-colors">
+                            <span class="material-symbols-outlined">receipt_long</span>
+                        </button>
+                    </td>
+                </tr>
+                <!-- Row 4: Recent -->
+                <tr class="hover:bg-primary/5 transition-colors group">
+                    <td class="px-6 py-5 font-mono text-sm text-slate-400">#AT-90232</td>
+                    <td class="px-6 py-5">
+                        <div class="flex items-center gap-3">
+                            <div class="size-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-xs border border-primary/30">VC</div>
+                            <span class="font-medium">Victor Castillo</span>
+                        </div>
+                    </td>
+                    <td class="px-6 py-5 text-sm text-slate-400">Hoy, 08:45</td>
+                    <td class="px-6 py-5 font-bold text-slate-100">$425.00</td>
+                    <td class="px-6 py-5">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-500/10 text-amber-500 border border-amber-500/20">
+                            PENDIENTE
+                        </span>
+                    </td>
+                    <td class="px-6 py-5 text-right">
+                        <button class="bg-red-500 text-white text-[10px] font-black uppercase px-3 py-1.5 rounded hover:bg-red-600 transition-all tracking-wider flex items-center gap-1 ml-auto">
+                            <span class="material-symbols-outlined text-sm">history_toggle_off</span>
+                            Reversar Venta
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <!-- Pagination -->
+        <div class="px-6 py-4 bg-primary/5 border-t border-primary/10 flex items-center justify-between">
+            <span class="text-xs text-slate-500 font-medium tracking-wide">Mostrando 4 de 128 transacciones</span>
+            <div class="flex gap-2">
+                <button class="size-8 rounded border border-primary/20 flex items-center justify-center hover:bg-primary/10 text-slate-400">
+                    <span class="material-symbols-outlined text-lg">chevron_left</span>
+                </button>
+                <button class="size-8 rounded bg-primary text-background-dark font-bold text-xs flex items-center justify-center shadow-sm">1</button>
+                <button class="size-8 rounded border border-primary/20 flex items-center justify-center hover:bg-primary/10 text-slate-400 text-xs font-bold">2</button>
+                <button class="size-8 rounded border border-primary/20 flex items-center justify-center hover:bg-primary/10 text-slate-400 text-xs font-bold">3</button>
+                <button class="size-8 rounded border border-primary/20 flex items-center justify-center hover:bg-primary/10 text-slate-400">
+                    <span class="material-symbols-outlined text-lg">chevron_right</span>
+                </button>
+            </div>
+        </div>
+    </section>
+    <!-- Stats Overview Footer -->
+    <footer class="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-6">
+        <div class="bg-primary/5 border border-primary/10 p-5 rounded-xl">
+            <p class="text-[10px] font-black uppercase tracking-[0.2em] text-primary/60 mb-1">Ventas Totales (Mes)</p>
+            <p class="text-2xl font-black text-slate-100">$45,820.00</p>
+            <div class="mt-2 flex items-center gap-1 text-emerald-500 text-xs font-bold">
+                <span class="material-symbols-outlined text-sm">trending_up</span>
+                +12.5% vs anterior
+            </div>
+        </div>
+        <div class="bg-primary/5 border border-primary/10 p-5 rounded-xl">
+            <p class="text-[10px] font-black uppercase tracking-[0.2em] text-primary/60 mb-1">Transacciones Activas</p>
+            <p class="text-2xl font-black text-slate-100">1,204</p>
+            <div class="mt-2 flex items-center gap-1 text-primary text-xs font-bold">
+                <span class="material-symbols-outlined text-sm">schedule</span>
+                Actualizado hace 2 min
+            </div>
+        </div>
+        <div class="bg-red-500/5 border border-red-500/10 p-5 rounded-xl">
+            <p class="text-[10px] font-black uppercase tracking-[0.2em] text-red-500/60 mb-1">Reversiones (24h)</p>
+            <p class="text-2xl font-black text-slate-100">03</p>
+            <div class="mt-2 flex items-center gap-1 text-slate-400 text-xs font-bold">
+                <span class="material-symbols-outlined text-sm">info</span>
+                Límite diario: 10
+            </div>
+        </div>
+    </footer>
+</main>

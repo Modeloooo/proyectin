@@ -1,0 +1,18 @@
+﻿@model ProyectoFinalGrupo3.Models.Usuarios
+<div id="registerSuccessModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-background-dark/80 backdrop-blur-sm">
+    <div class="w-full max-w-sm bg-background-dark border border-green-900/50 rounded-xl p-8 shadow-2xl relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-1 bg-green-600/50"></div>
+        <div class="flex flex-col items-center text-center">
+            <div class="w-16 h-16 bg-green-950/30 rounded-full flex items-center justify-center mb-6 border border-green-900/30">
+                <span class="material-symbols-outlined text-green-500 text-4xl">check_circle</span>
+            </div>
+            <h3 class="text-xl font-bold text-white mb-3">Registro Exitoso</h3>
+            <p class="text-slate-400 text-sm leading-relaxed mb-8">
+                Bienvenido, @(Model?.NombreCompleto ?? "Usuario"). Redirigiendo...
+            </p>
+            <button onclick="closeModal('registerSuccessModal')" class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-3 px-6 rounded-lg transition-all shadow-lg shadow-primary/10">
+                Continuar
+            </button>
+        </div>
+    </div>
+</div>

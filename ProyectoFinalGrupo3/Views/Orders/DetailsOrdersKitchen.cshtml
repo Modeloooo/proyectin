@@ -1,0 +1,218 @@
+@{
+    Layout = "~/Views/Shared/_CustomLayout.cshtml";
+    ViewData["Title"] = "DetailsOrdersKitchen";
+}
+        <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+            <!-- Top Navigation Bar -->
+            <header class="h-16 border-b border-border-dark flex items-center justify-between px-8 bg-background-dark">
+                <div class="flex items-center gap-4">
+                    <h2 class="text-lg font-semibold">Módulo de Cocina - Atelier 27</h2>
+                    <span class="px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-500 text-xs font-bold uppercase tracking-wider">Sistema Activo</span>
+                </div>
+                <div class="flex items-center gap-6">
+                    <div class="relative">
+                        <span class="material-symbols-outlined text-slate-400">notifications</span>
+                        <span class="absolute -top-1 -right-1 size-2 bg-primary rounded-full"></span>
+                    </div>
+                    <div class="flex items-center gap-2 bg-surface-dark px-3 py-1.5 rounded-lg border border-border-dark">
+                        <span class="material-symbols-outlined text-primary text-sm">schedule</span>
+                        <span class="text-sm font-medium tabular-nums">14:45:22</span>
+                    </div>
+                </div>
+            </header>
+            <!-- Status Tabs -->
+            <div class="flex border-b border-border-dark bg-background-dark px-8">
+                <button class="px-6 py-4 border-b-2 border-primary text-primary font-bold text-sm">ACTIVOS (12)</button>
+                <button class="px-6 py-4 border-b-2 border-transparent text-slate-500 font-medium text-sm hover:text-slate-300">PENDIENTES (5)</button>
+                <button class="px-6 py-4 border-b-2 border-transparent text-slate-500 font-medium text-sm hover:text-slate-300">COMPLETADOS</button>
+            </div>
+            <!-- Orders Grid -->
+            <div class="flex-1 overflow-y-auto p-8 bg-background-light dark:bg-background-dark/50">
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
+                    <!-- Ticket 1 (Urgent/Long wait) -->
+                    <div class="bg-surface-dark border-l-4 border-red-500 rounded-xl shadow-lg flex flex-col overflow-hidden">
+                        <div class="p-4 border-b border-border-dark bg-red-500/5">
+                            <div class="flex justify-between items-start mb-2">
+                                <span class="text-2xl font-black text-slate-100">MESA 05</span>
+                                <span class="text-red-400 font-bold tabular-nums flex items-center gap-1">
+                                    <span class="material-symbols-outlined text-sm">timer</span> 22 min
+                                </span>
+                            </div>
+                            <p class="text-xs text-slate-500 font-medium tracking-wide">ORDEN #1024 • 4 ITEMS</p>
+                        </div>
+                        <div class="flex-1 p-4 space-y-4">
+                            <div class="flex flex-col gap-3">
+                                <div class="flex justify-between items-center group">
+                                    <span class="text-slate-100 font-medium">1x Solomillo al punto</span>
+                                    <div class="flex gap-1">
+                                        <button class="p-1 rounded bg-primary/20 text-primary border border-primary/30 text-[10px] font-bold">PREP</button>
+                                        <button class="p-1 rounded bg-surface-dark text-slate-500 border border-border-dark text-[10px] font-bold">LISTO</button>
+                                    </div>
+                                </div>
+                                <div class="flex justify-between items-center opacity-40">
+                                    <span class="text-slate-100 line-through">1x Ensalada César</span>
+                                    <span class="material-symbols-outlined text-emerald-500 text-sm">check_circle</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-slate-100 font-medium">2x Risotto de Setas</span>
+                                    <div class="flex gap-1">
+                                        <button class="p-1 rounded bg-surface-dark text-slate-300 border border-border-dark text-[10px] font-bold uppercase">Pendiente</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="w-full py-3 bg-surface-dark text-slate-400 font-bold text-xs uppercase tracking-widest border-t border-border-dark hover:bg-primary hover:text-white transition-all">
+                            Finalizar Comanda
+                        </button>
+                    </div>
+                    <!-- Ticket 2 -->
+                    <div class="bg-surface-dark border-l-4 border-primary rounded-xl shadow-lg flex flex-col overflow-hidden">
+                        <div class="p-4 border-b border-border-dark">
+                            <div class="flex justify-between items-start mb-2">
+                                <span class="text-2xl font-black text-slate-100">MESA 12</span>
+                                <span class="text-primary font-bold tabular-nums flex items-center gap-1">
+                                    <span class="material-symbols-outlined text-sm">timer</span> 08 min
+                                </span>
+                            </div>
+                            <p class="text-xs text-slate-500 font-medium tracking-wide">ORDEN #1025 • 2 ITEMS</p>
+                        </div>
+                        <div class="flex-1 p-4 space-y-4">
+                            <div class="flex flex-col gap-3">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-slate-100 font-medium">1x Salmón Glaseado</span>
+                                    <div class="flex gap-1">
+                                        <button class="p-1 rounded bg-primary/20 text-primary border border-primary/30 text-[10px] font-bold">PREP</button>
+                                    </div>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-slate-100 font-medium">1x Copa de Cava</span>
+                                    <div class="flex gap-1">
+                                        <button class="p-1 rounded bg-surface-dark text-slate-300 border border-border-dark text-[10px] font-bold">PEND</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="w-full py-3 bg-surface-dark text-slate-400 font-bold text-xs uppercase tracking-widest border-t border-border-dark hover:bg-primary hover:text-white transition-all">
+                            Finalizar Comanda
+                        </button>
+                    </div>
+                    <!-- Ticket 3 (Nearly Done) -->
+                    <div class="bg-surface-dark border-l-4 border-emerald-500 rounded-xl shadow-lg flex flex-col overflow-hidden">
+                        <div class="p-4 border-b border-border-dark bg-emerald-500/5">
+                            <div class="flex justify-between items-start mb-2">
+                                <span class="text-2xl font-black text-slate-100">MESA 08</span>
+                                <span class="text-slate-400 font-bold tabular-nums flex items-center gap-1">
+                                    <span class="material-symbols-outlined text-sm">timer</span> 14 min
+                                </span>
+                            </div>
+                            <p class="text-xs text-slate-500 font-medium tracking-wide">ORDEN #1026 • 3 ITEMS</p>
+                        </div>
+                        <div class="flex-1 p-4 space-y-4">
+                            <div class="flex flex-col gap-3">
+                                <div class="flex justify-between items-center opacity-40">
+                                    <span class="text-slate-100 line-through">2x Croquetas Ibéricas</span>
+                                    <span class="material-symbols-outlined text-emerald-500 text-sm">check_circle</span>
+                                </div>
+                                <div class="flex justify-between items-center opacity-40">
+                                    <span class="text-slate-100 line-through">1x Pulpo a la Brasa</span>
+                                    <span class="material-symbols-outlined text-emerald-500 text-sm">check_circle</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-slate-100 font-medium">1x Tarta de Queso</span>
+                                    <div class="flex gap-1">
+                                        <button class="p-1 rounded bg-emerald-500/20 text-emerald-500 border border-emerald-500/30 text-[10px] font-bold">LISTO</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="w-full py-3 bg-emerald-500 text-white font-bold text-xs uppercase tracking-widest border-t border-border-dark">
+                            Entregar Orden
+                        </button>
+                    </div>
+                    <!-- Ticket 4 -->
+                    <div class="bg-surface-dark border-l-4 border-primary rounded-xl shadow-lg flex flex-col overflow-hidden">
+                        <div class="p-4 border-b border-border-dark">
+                            <div class="flex justify-between items-start mb-2">
+                                <span class="text-2xl font-black text-slate-100">MESA 03</span>
+                                <span class="text-primary font-bold tabular-nums flex items-center gap-1">
+                                    <span class="material-symbols-outlined text-sm">timer</span> 03 min
+                                </span>
+                            </div>
+                            <p class="text-xs text-slate-500 font-medium tracking-wide">ORDEN #1027 • 1 ITEM</p>
+                        </div>
+                        <div class="flex-1 p-4 space-y-4">
+                            <div class="flex flex-col gap-3">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-slate-100 font-medium">1x Hamburguesa Gourmet</span>
+                                    <div class="flex gap-1">
+                                        <button class="p-1 rounded bg-surface-dark text-slate-300 border border-border-dark text-[10px] font-bold uppercase">Pendiente</button>
+                                    </div>
+                                </div>
+                                <div class="p-2 rounded bg-yellow-500/10 border border-yellow-500/20">
+                                    <p class="text-[10px] text-yellow-500 font-bold uppercase mb-1 flex items-center gap-1">
+                                        <span class="material-symbols-outlined text-xs">warning</span> Nota del Cliente
+                                    </p>
+                                    <p class="text-xs text-slate-300">Sin cebolla, carne muy hecha.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="w-full py-3 bg-surface-dark text-slate-400 font-bold text-xs uppercase tracking-widest border-t border-border-dark hover:bg-primary hover:text-white transition-all">
+                            Finalizar Comanda
+                        </button>
+                    </div>
+                    <!-- Ticket 5 -->
+                    <div class="bg-surface-dark border-l-4 border-primary rounded-xl shadow-lg flex flex-col overflow-hidden">
+                        <div class="p-4 border-b border-border-dark">
+                            <div class="flex justify-between items-start mb-2">
+                                <span class="text-2xl font-black text-slate-100">MESA 18</span>
+                                <span class="text-primary font-bold tabular-nums flex items-center gap-1">
+                                    <span class="material-symbols-outlined text-sm">timer</span> 12 min
+                                </span>
+                            </div>
+                            <p class="text-xs text-slate-500 font-medium tracking-wide">ORDEN #1028 • 2 ITEMS</p>
+                        </div>
+                        <div class="flex-1 p-4 space-y-4">
+                            <div class="flex flex-col gap-3">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-slate-100 font-medium">1x Raviolis de Pera</span>
+                                    <div class="flex gap-1">
+                                        <button class="p-1 rounded bg-primary text-white border border-primary text-[10px] font-bold">PREP</button>
+                                    </div>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-slate-100 font-medium">1x Bacalao Confitado</span>
+                                    <div class="flex gap-1">
+                                        <button class="p-1 rounded bg-surface-dark text-slate-300 border border-border-dark text-[10px] font-bold">PEND</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="w-full py-3 bg-surface-dark text-slate-400 font-bold text-xs uppercase tracking-widest border-t border-border-dark hover:bg-primary hover:text-white transition-all">
+                            Finalizar Comanda
+                        </button>
+                    </div>
+                    <!-- Add Order Placeholder -->
+                    <div class="border-2 border-dashed border-border-dark rounded-xl flex items-center justify-center p-8 opacity-40 hover:opacity-100 cursor-pointer transition-opacity">
+                        <div class="text-center">
+                            <span class="material-symbols-outlined text-4xl mb-2 text-slate-500">add_circle</span>
+                            <p class="text-sm font-bold uppercase tracking-widest text-slate-500">Nueva Orden</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Footer Stats -->
+            <footer class="h-12 border-t border-border-dark bg-surface-dark flex items-center px-8 gap-10">
+                <div class="flex items-center gap-2 text-xs font-medium text-slate-400">
+                    <span class="size-2 rounded-full bg-red-500"></span> 1 Urgente
+                </div>
+                <div class="flex items-center gap-2 text-xs font-medium text-slate-400">
+                    <span class="size-2 rounded-full bg-primary"></span> 8 En Preparación
+                </div>
+                <div class="flex items-center gap-2 text-xs font-medium text-slate-400">
+                    <span class="size-2 rounded-full bg-emerald-500"></span> 3 Listos para Entrega
+                </div>
+                <div class="ml-auto flex items-center gap-4 text-xs font-bold text-primary tracking-widest uppercase">
+                    Tiempo promedio: 14 min
+                </div>
+            </footer>
+        </div>

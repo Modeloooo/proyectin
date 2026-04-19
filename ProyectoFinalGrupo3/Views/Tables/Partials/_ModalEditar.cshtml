@@ -1,0 +1,46 @@
+﻿<div class="bg-background-light dark:bg-background-dark border border-primary/20 rounded-xl shadow-xl overflow-hidden">
+    <div id="modalEditar" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0a0805]/80 backdrop-blur-sm hidden">
+        <div class="bg-background-light dark:bg-[#1a160d] w-full max-w-2xl rounded-2xl border border-primary/20 shadow-2xl overflow-hidden">
+
+            <!-- Header -->
+            <div class="px-8 py-6 border-b border-primary/10 flex justify-between">
+                <h2 class="text-2xl font-black text-primary">Editar Mesa</h2>
+                <button id="cerrarEditar">X</button>
+            </div>
+
+            <!-- Body -->
+            <div class="p-8">
+                <form asp-controller="Tables" asp-action="Editar" method="post" class="space-y-6">
+
+                    <!-- Número Mesa (readonly) -->
+                    <div class="mb-4">
+                        <label>Número de Mesa</label>
+                        <input id="editNumeroMesa" name="NumeroMesa" readonly class="w-full bg-slate-100 dark:bg-primary/5 border border-primary/20 rounded-xl px-4 py-3 text-sm focus:ring-primary focus:border-primary transition-all outline-none"/>
+                    </div>
+
+                    <!-- Capacidad -->
+                    <div class="mb-4">
+                        <label>Capacidad</label>
+                        <input id="editCapacidad" name="Capacidad" type="number" min="1" required class="w-full bg-slate-100 dark:bg-primary/5 border border-primary/20 rounded-xl px-4 py-3 text-sm focus:ring-primary focus:border-primary transition-all outline-none" />
+                    </div>
+
+                    <!-- Estado -->
+                    <div class="mb-4">
+                        <label>Estado</label>
+                        <select asp-validation-for="Estado" id="editEstado" name="Estado" class="w-full bg-slate-100 dark:bg-primary/5 border border-primary/20 rounded-xl px-4 py-3 text-sm focus:ring-primary focus:border-primary transition-all outline-none">
+                            <option value="Libre">Libre</option>
+                            <option value="Ocupada">Ocupada</option>
+                            <option value="Reservada">Reservada</option>
+                        </select>
+                    </div>
+
+                    <!-- Botones -->
+                    <div class="flex justify-end gap-2">
+                        <button type="button" id="cancelarEditar" class="bg-gray-400 px-4 py-2 rounded">Cancelar</button>
+                        <button type="submit" class="bg-primary text-white px-4 py-2 rounded">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

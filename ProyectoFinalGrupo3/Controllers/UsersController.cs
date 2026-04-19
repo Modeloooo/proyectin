@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using ProyectoFinalGrupo3.Data;
 using ProyectoFinalGrupo3.Models;
 using System.Security.Claims;
@@ -9,41 +8,39 @@ using System.Text.RegularExpressions;
 
 namespace ProyectoFinalGrupo3.Controllers
 {
+    [Authorize]
     public class UsersController : Controller
     {
         private readonly RestauranteDbContext _context;
+        private readonly PasswordHasher<object> _hasher = new PasswordHasher<object>();
 
         public UsersController(RestauranteDbContext context)
         {
             _context = context;
         }
+
         public IActionResult Index()
         {
-            var lista = _context.Usuarios.ToList();
-            return View(lista);
+            return View(_context.Usuarios.ToList());
         }
 
         public IActionResult HomeUser()
         {
             var id = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             var usuario = _context.Usuarios.FirstOrDefault(u => u.Identificacion == id);
 
-            var fechaLimite = DateTime.Now.AddDays(-30);
-
             var pedidos = _context.Pedidos
-                .Where(p => p.IdUsuario == id && p.Fecha >= fechaLimite)
+                .Where(p => p.IdUsuario == id && p.Fecha >= DateTime.Now.AddDays(-30))
                 .OrderByDescending(p => p.Fecha)
                 .ToList();
 
-            var model = new HomeUserViewModel
+            return View(new HomeUserViewModel
             {
                 Usuario = usuario,
                 Pedidos = pedidos
-            };
-
-            return View(model);
+            });
         }
-
 
         public IActionResult DetailsUser()
         {
@@ -52,127 +49,38 @@ namespace ProyectoFinalGrupo3.Controllers
             return View(usuario);
         }
 
-        public IActionResult EditUser(Usuarios usuario)
-        {
-            var hasher = new PasswordHasher<object>();
-            try
-            {
-                var usuarioDb = _context.Usuarios
-                    .FirstOrDefault(u => u.Identificacion == usuario.Identificacion);
-
-                if (usuarioDb == null)
-                {
-                    TempData["Error"] = "Usuario no encontrado";
-                    return RedirectToAction("HomeUser");
-                }
-
-                if (string.IsNullOrWhiteSpace(usuario.NombreCompleto))
-                {
-                    TempData["Error"] = "El nombre completo es obligatorio";
-                    return View(usuarioDb); // mejor volver a la misma vista
-                }
-
-                if (string.IsNullOrWhiteSpace(usuario.Correo) || !EsCorreoValido(usuario.Correo))
-                {
-                    TempData["Error"] = "Debe ingresar un correo válido";
-                    return View(usuarioDb);
-                }
-
-                bool correoDuplicado = _context.Usuarios.Any(u =>
-                    u.Correo == usuario.Correo &&
-                    u.Identificacion != usuario.Identificacion);
-
-                if (correoDuplicado)
-                {
-                    TempData["Error"] = "Ya existe otro usuario con ese correo";
-                    return View(usuarioDb);
-                }
-
-                if (usuarioDb.Perfil == "Administrador" &&
-                    usuario.Perfil != "Administrador")
-                {
-                    int adminsActivos = _context.Usuarios.Count(u => u.Perfil == "Administrador");
-                    if (adminsActivos <= 1)
-                    {
-                        TempData["Error"] = "Debe quedar al menos un administrador en el sistema";
-                        return View(usuarioDb);
-                    }
-                }
-
-                // Actualizar campos
-                usuarioDb.NombreCompleto = usuario.NombreCompleto;
-                usuarioDb.Genero = usuario.Genero;
-                usuarioDb.Correo = usuario.Correo;
-                usuarioDb.TipoTarjeta = usuario.TipoTarjeta;
-
-                // ⚠️ Guardar número real, mostrar enmascarado en la vista
-                usuarioDb.NumeroTarjeta = usuario.NumeroTarjeta;
-
-                if (!string.IsNullOrWhiteSpace(usuario.Contrasena))
-                {
-                    usuarioDb.Contrasena = hasher.HashPassword(null, usuario.Contrasena);// usar hash
-                }
-
-                _context.SaveChanges();
-
-                TempData["Success"] = "Usuario actualizado correctamente";
-                return RedirectToAction("DetailsUser");
-            }
-            catch (Exception ex)
-            {
-                TempData["Error"] = "Ocurrió un error al actualizar el usuario: " + ex.Message;
-                return RedirectToAction("HomeUser");
-            }
-        }
-
-
         [HttpPost]
         public IActionResult Crear(Usuarios usuario)
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(usuario.Identificacion))
-                {
-                    TempData["Error"] = "La identificación es obligatoria";
+                if (!ModelState.IsValid)
                     return RedirectToAction("Index");
-                }
 
-                if (string.IsNullOrWhiteSpace(usuario.NombreCompleto))
+                if (!EsCorreoValido(usuario.Correo))
                 {
-                    TempData["Error"] = "El nombre completo es obligatorio";
-                    return RedirectToAction("Index");
-                }
-
-                if (string.IsNullOrWhiteSpace(usuario.Correo) || !EsCorreoValido(usuario.Correo))
-                {
-                    TempData["Error"] = "Debe ingresar un correo válido";
-                    return RedirectToAction("Index");
-                }
-
-                if (string.IsNullOrWhiteSpace(usuario.Contrasena))
-                {
-                    TempData["Error"] = "La contraseña es obligatoria";
+                    TempData["Error"] = "Correo inválido";
                     return RedirectToAction("Index");
                 }
 
                 if (_context.Usuarios.Any(u => u.Identificacion == usuario.Identificacion))
                 {
-                    TempData["Error"] = "Ya existe un usuario con esa identificación";
+                    TempData["Error"] = "Identificación ya existe";
                     return RedirectToAction("Index");
                 }
 
                 if (_context.Usuarios.Any(u => u.Correo == usuario.Correo))
                 {
-                    TempData["Error"] = "Ya existe un usuario con ese correo";
+                    TempData["Error"] = "Correo ya registrado";
                     return RedirectToAction("Index");
                 }
 
+                usuario.Contrasena = _hasher.HashPassword(null, usuario.Contrasena);
                 usuario.DineroDisponible = 0;
+                usuario.Perfil ??= "Usuario";
 
-                if (string.IsNullOrWhiteSpace(usuario.Perfil))
-                    usuario.Perfil = "Usuario";
-
-                usuario.NumeroTarjeta = EnmascararTarjeta(usuario.NumeroTarjeta);
+                // Guardar número REAL
+                usuario.NumeroTarjeta = LimpiarTarjeta(usuario.NumeroTarjeta);
 
                 _context.Usuarios.Add(usuario);
                 _context.SaveChanges();
@@ -181,7 +89,7 @@ namespace ProyectoFinalGrupo3.Controllers
             }
             catch (Exception ex)
             {
-                TempData["Error"] = "Ocurrió un error al guardar el usuario: " + ex.Message;
+                TempData["Error"] = ex.Message;
             }
 
             return RedirectToAction("Index");
@@ -200,15 +108,9 @@ namespace ProyectoFinalGrupo3.Controllers
                     return RedirectToAction("Index");
                 }
 
-                if (string.IsNullOrWhiteSpace(usuario.NombreCompleto))
+                if (!EsCorreoValido(usuario.Correo))
                 {
-                    TempData["Error"] = "El nombre completo es obligatorio";
-                    return RedirectToAction("Index");
-                }
-
-                if (string.IsNullOrWhiteSpace(usuario.Correo) || !EsCorreoValido(usuario.Correo))
-                {
-                    TempData["Error"] = "Debe ingresar un correo válido";
+                    TempData["Error"] = "Correo inválido";
                     return RedirectToAction("Index");
                 }
 
@@ -218,62 +120,115 @@ namespace ProyectoFinalGrupo3.Controllers
 
                 if (correoDuplicado)
                 {
-                    TempData["Error"] = "Ya existe otro usuario con ese correo";
+                    TempData["Error"] = "Correo ya en uso";
                     return RedirectToAction("Index");
                 }
 
-                if (usuarioDb.Perfil == "Administrador" &&
-                    usuario.Perfil != "Administrador")
+                // Validar admin
+                if (usuarioDb.Perfil == "Administrador" && usuario.Perfil != "Administrador")
                 {
-                    int adminsActivos = _context.Usuarios.Count(u => u.Perfil == "Administrador");
-                    if (adminsActivos <= 1)
+                    int totalAdmins = _context.Usuarios.Count(u => u.Perfil == "Administrador");
+                    if (totalAdmins <= 1)
                     {
-                        TempData["Error"] = "Debe quedar al menos un administrador en el sistema";
+                        TempData["Error"] = "Debe existir al menos un administrador";
                         return RedirectToAction("Index");
                     }
                 }
 
+                // Actualizar datos
                 usuarioDb.NombreCompleto = usuario.NombreCompleto;
                 usuarioDb.Genero = usuario.Genero;
                 usuarioDb.Correo = usuario.Correo;
                 usuarioDb.TipoTarjeta = usuario.TipoTarjeta;
-                usuarioDb.NumeroTarjeta = EnmascararTarjeta(usuario.NumeroTarjeta);
+                usuarioDb.NumeroTarjeta = LimpiarTarjeta(usuario.NumeroTarjeta);
                 usuarioDb.Perfil = usuario.Perfil;
 
                 if (!string.IsNullOrWhiteSpace(usuario.Contrasena))
-                    usuarioDb.Contrasena = usuario.Contrasena;
+                {
+                    usuarioDb.Contrasena = _hasher.HashPassword(null, usuario.Contrasena);
+                }
 
                 _context.SaveChanges();
 
-                TempData["Success"] = "Usuario actualizado correctamente";
+                TempData["Success"] = "Usuario actualizado";
             }
             catch (Exception ex)
             {
-                TempData["Error"] = "Ocurrió un error al actualizar el usuario: " + ex.Message;
+                TempData["Error"] = ex.Message;
             }
 
             return RedirectToAction("Index");
         }
 
-       
+        [HttpPost]
+        public IActionResult Eliminar(string id)
+        {
+            try
+            {
+                var usuario = _context.Usuarios.Find(id);
+
+                if (usuario == null)
+                {
+                    TempData["Error"] = "Usuario no encontrado";
+                    return RedirectToAction("Index");
+                }
+
+                // ✅ Validación 1: No se puede eliminar el último administrador (VA PRIMERO)
+                if (usuario.Perfil == "Administrador")
+                {
+                    int totalAdmins = _context.Usuarios.Count(u => u.Perfil == "Administrador");
+                    if (totalAdmins <= 1)
+                    {
+                        TempData["Error"] = "No se puede eliminar el último administrador del sistema";
+                        return RedirectToAction("Index");
+                    }
+                }
+
+                // Validación 2: No se puede eliminar un usuario que haya realizado pedidos
+                bool tienePedidos = _context.Pedidos.Any(p => p.IdUsuario == id);
+
+                // Validación 3: No se puede eliminar un usuario que se haya logueado al menos una vez
+                bool haLogueado = usuario.UltimoLogin != null;
+
+                if (tienePedidos || haLogueado)
+                {
+                    TempData["Error"] = "No se puede eliminar el usuario porque ya ha realizado pedidos o ha iniciado sesión";
+                    return RedirectToAction("Index");
+                }
+
+                _context.Usuarios.Remove(usuario);
+                _context.SaveChanges();
+
+                TempData["Success"] = "Usuario eliminado correctamente";
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Ocurrió un error al eliminar el usuario: " + ex.Message;
+            }
+
+            return RedirectToAction("Index");
+        }
+
         private bool EsCorreoValido(string correo)
         {
             return Regex.IsMatch(correo, @"^[^@\s]+@[^@\s]+\.[^@\s]+$");
         }
 
-        private string? EnmascararTarjeta(string? numeroTarjeta)
+        private string? LimpiarTarjeta(string? numeroTarjeta)
         {
             if (string.IsNullOrWhiteSpace(numeroTarjeta))
                 return null;
 
-            string soloDigitos = new string(numeroTarjeta.Where(char.IsDigit).ToArray());
-
-            if (soloDigitos.Length < 4)
-                return numeroTarjeta;
-
-            string ultimos4 = soloDigitos.Substring(soloDigitos.Length - 4);
-            return $"****-****-****-{ultimos4}";
+            return new string(numeroTarjeta.Where(char.IsDigit).ToArray());
         }
 
+        // Para la vista
+        public static string EnmascararTarjeta(string? numero)
+        {
+            if (string.IsNullOrWhiteSpace(numero) || numero.Length < 4)
+                return "****";
+
+            return $"****-****-****-{numero[^4..]}";
+        }
     }
 }

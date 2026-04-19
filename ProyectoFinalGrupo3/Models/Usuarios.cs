@@ -18,10 +18,10 @@ namespace ProyectoFinalGrupo3.Models
         public decimal? DineroDisponible { get; set; }
         [Required(ErrorMessage = "La Contraseña es obligatoria")]
         public string Contrasena { get; set; }
-        public string Perfil {  get; set; }
+        public string Perfil { get; set; }
         public string? CodigoRecuperacion { get; set; }
-
         public DateTime? CodigoExpira { get; set; }
+        public DateTime? UltimoLogin { get; set; }
 
         public virtual ICollection<Pedido> Pedidos { get; set; } = new List<Pedido>();
     }

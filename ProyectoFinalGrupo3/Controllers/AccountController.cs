@@ -81,6 +81,8 @@ namespace ProyectoFinalGrupo3.Controllers
                 usuario.Contrasena = hasher.HashPassword(null, model.Contrasena);
                 _context.SaveChanges();
             }
+            usuario.UltimoLogin = DateTime.Now;
+            _context.SaveChanges();
 
             // Generar token y cookie
             var token = GenerateJwtToken(usuario);

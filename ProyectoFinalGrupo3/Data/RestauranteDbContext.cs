@@ -30,7 +30,7 @@ namespace ProyectoFinalGrupo3.Data
                 entity.Property(e => e.Perfil).HasMaxLength(15);
                 entity.Property(e => e.CodigoRecuperacion).HasMaxLength(50);
                 entity.Property(e => e.CodigoExpira).HasColumnType("datetime");
-
+                entity.Property(e => e.UltimoLogin).HasColumnType("datetime");
             });
 
             modelBuilder.Entity<Categorias>(entity =>

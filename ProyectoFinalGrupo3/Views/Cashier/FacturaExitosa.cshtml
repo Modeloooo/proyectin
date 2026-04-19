@@ -1,0 +1,33 @@
+﻿@{
+    Layout = "~/Views/Shared/_CustomLayout.cshtml";
+    ViewData["Title"] = "FacturaExitosa";
+}
+
+<main class="flex-1 flex flex-col items-center justify-center min-w-0 p-6">
+    <div class="bg-background-light dark:bg-background-dark border border-green-500/30 rounded-2xl p-12 text-center max-w-md">
+        <div class="size-20 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
+            <span class="material-symbols-outlined text-6xl text-green-500">check_circle</span>
+        </div>
+        
+        <h2 class="text-3xl font-black text-slate-900 dark:text-slate-100 mb-2">
+            ¡Factura Generada!
+        </h2>
+        
+        <p class="text-lg text-slate-500 mb-6">
+            Factura #@ViewBag.FacturaId
+        </p>
+        
+        <p class="text-sm text-slate-400 mb-8">
+            Se ha enviado una copia al correo del cliente.
+        </p>
+        
+        <div class="flex gap-4">
+            <a asp-action="Index" class="flex-1 px-6 py-3 bg-primary text-white rounded-xl font-bold hover:bg-primary/90">
+                Nuevo Cobro
+            </a>
+            <a asp-action="HistorialFacturas" class="flex-1 px-6 py-3 border border-primary/20 rounded-xl font-bold hover:bg-primary/10">
+                Ver Historial
+            </a>
+        </div>
+    </div>
+</main>

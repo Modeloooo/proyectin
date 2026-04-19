@@ -1,234 +1,159 @@
+@model IEnumerable<ProyectoFinalGrupo3.Models.Factura>
+
 @{
     Layout = "~/Views/Shared/_CustomLayout.cshtml";
     ViewData["Title"] = "History";
-
+    var usuarios = ViewBag.Usuarios as List<Usuarios>;
+    var usuarioFiltro = ViewBag.UsuarioFiltro as string;
+    var fechaInicio = ViewBag.FechaInicio as string;
+    var fechaFin = ViewBag.FechaFin as string;
 }
-        <!-- Main Content Area -->
-        <div class="flex-1 flex flex-col overflow-hidden">
-            <!-- Header section -->
-            <header class="p-8 pb-4">
-                <div class="flex flex-col gap-2">
-                    <h2 class="text-4xl font-black tracking-tight text-slate-900 dark:text-white">Historial de Compras</h2>
-                    <p class="text-slate-500 dark:text-slate-400">Consulte y gestione todas las transacciones pasadas del restaurante.</p>
-                </div>
-            </header>
-            <!-- Filters & Search Section -->
-            <section class="px-8 py-4 flex flex-col gap-4">
-                <div class="flex flex-wrap gap-4 items-center">
-                    <div class="relative flex-1 min-w-[300px]">
-                        <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-primary/50">search</span>
-                        <input class="w-full pl-12 pr-4 py-3 bg-white dark:bg-white/5 border border-slate-200 dark:border-primary/20 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500" placeholder="Buscar por ID de pedido o cliente..." type="text" />
-                    </div>
-                    <div class="flex gap-2">
-                        <button class="flex items-center gap-2 px-4 py-3 bg-white dark:bg-white/5 border border-slate-200 dark:border-primary/20 rounded-xl text-sm font-medium hover:bg-slate-50 dark:hover:bg-white/10 transition-colors">
-                            <span class="material-symbols-outlined text-xl">calendar_today</span>
-                            Hoy
-                            <span class="material-symbols-outlined text-sm">expand_more</span>
-                        </button>
-                        <button class="flex items-center gap-2 px-4 py-3 bg-white dark:bg-white/5 border border-slate-200 dark:border-primary/20 rounded-xl text-sm font-medium hover:bg-slate-50 dark:hover:bg-white/10 transition-colors">
-                            Últimos 7 días
-                            <span class="material-symbols-outlined text-sm">expand_more</span>
-                        </button>
-                        <button class="flex items-center gap-2 px-4 py-3 bg-white dark:bg-white/5 border border-slate-200 dark:border-primary/20 rounded-xl text-sm font-medium hover:bg-slate-50 dark:hover:bg-white/10 transition-colors text-primary">
-                            <span class="material-symbols-outlined text-xl">filter_list</span>
-                            Más Filtros
-                        </button>
-                    </div>
-                </div>
-            </section>
-            <!-- Transactions Table -->
-            <section class="flex-1 px-8 py-4 overflow-auto">
-                <div class="bg-background-light dark:bg-background-dark border border-primary/20 rounded-xl shadow-xl overflow-hidden">
-                    <table class="w-full text-left border-collapse">
-                        <thead>
-                            <tr class="bg-primary/5 border-b border-primary/20">
-                                <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-primary/80">ID Pedido</th>
-                                <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-primary/80">Cliente</th>
-                                <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-primary/80">Fecha y Hora</th>
-                                <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-primary/80">Método de Pago</th>
-                                <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-primary/80">Total</th>
-                                <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-primary/80 text-center">Estado</th>
-                                <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-primary/80 text-center">Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-primary/10">
-                            <!-- Row 1 -->
-                            <tr class="hover:bg-primary/5 transition-colors group">
-                                <td class="px-6 py-5 font-bold text-slate-900 dark:text-white">#A27-9401</td>
-                                <td class="px-6 py-5">
-                                    <div class="flex items-center gap-3">
-                                        <div class="size-8 rounded-full bg-slate-200 dark:bg-primary/20 flex items-center justify-center overflow-hidden">
-                                            <span class="material-symbols-outlined text-slate-400 dark:text-primary text-sm">person</span>
-                                        </div>
-                                        <span class="font-medium">Carlos Mendoza</span>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-5 text-slate-500 dark:text-slate-400">24/05/2024 21:15</td>
-                                <td class="px-6 py-5">
-                                    <div class="flex items-center gap-2">
-                                        <span class="material-symbols-outlined text-primary">credit_card</span>
-                                        <span class="text-sm">Visa •••• 4242</span>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-5 font-bold text-slate-900 dark:text-white">$125.50</td>
-                                <td class="px-6 py-5 text-center">
-                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-green-100 dark:bg-green-500/10 text-green-700 dark:text-green-400">
-                                        COMPLETADO
-                                    </span>
-                                </td>
-                                <td class="px-6 py-5">
-                                    <div class="flex justify-center gap-2">
-                                        <button class="p-2 rounded-lg hover:bg-primary/20 text-slate-400 hover:text-primary transition-all" title="Ver">
-                                            <span class="material-symbols-outlined text-[20px]">visibility</span>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <!-- Row 2 -->
-                            <tr class="hover:bg-primary/5 transition-colors group">
-                                <td class="px-6 py-5 font-bold text-slate-900 dark:text-white">#A27-9402</td>
-                                <td class="px-6 py-5">
-                                    <div class="flex items-center gap-3">
-                                        <div class="size-8 rounded-full bg-slate-200 dark:bg-primary/20 flex items-center justify-center overflow-hidden">
-                                            <span class="material-symbols-outlined text-slate-400 dark:text-primary text-sm">person</span>
-                                        </div>
-                                        <span class="font-medium">Lucía Fernández</span>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-5 text-slate-500 dark:text-slate-400">24/05/2024 20:30</td>
-                                <td class="px-6 py-5">
-                                    <div class="flex items-center gap-2">
-                                        <span class="material-symbols-outlined text-primary">payments</span>
-                                        <span class="text-sm">Efectivo</span>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-5 font-bold text-slate-900 dark:text-white">$84.20</td>
-                                <td class="px-6 py-5 text-center">
-                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-green-100 dark:bg-green-500/10 text-green-700 dark:text-green-400">
-                                        COMPLETADO
-                                    </span>
-                                </td>
-                                <td class="px-6 py-5">
-                                    <div class="flex justify-center gap-2">
-                                        <button class="p-2 rounded-lg hover:bg-primary/20 text-slate-400 hover:text-primary transition-all" title="Ver">
-                                            <span class="material-symbols-outlined text-[20px]">visibility</span>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <!-- Row 3 -->
-                            <tr class="hover:bg-primary/5 transition-colors group">
-                                <td class="px-6 py-5 font-bold text-slate-900 dark:text-white">#A27-9403</td>
-                                <td class="px-6 py-5">
-                                    <div class="flex items-center gap-3">
-                                        <div class="size-8 rounded-full bg-slate-200 dark:bg-primary/20 flex items-center justify-center overflow-hidden">
-                                            <span class="material-symbols-outlined text-slate-400 dark:text-primary text-sm">person</span>
-                                        </div>
-                                        <span class="font-medium">Roberto Gómez</span>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-5 text-slate-500 dark:text-slate-400">24/05/2024 19:45</td>
-                                <td class="px-6 py-5">
-                                    <div class="flex items-center gap-2">
-                                        <span class="material-symbols-outlined text-primary">credit_card</span>
-                                        <span class="text-sm">Mastercard •••• 8812</span>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-5 font-bold text-slate-900 dark:text-white">$210.00</td>
-                                <td class="px-6 py-5 text-center">
-                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-red-100 dark:bg-red-500/10 text-red-700 dark:text-red-400">
-                                        REEMBOLSADO
-                                    </span>
-                                </td>
-                                <td class="px-6 py-5">
-                                    <div class="flex justify-center gap-2">
-                                        <button class="p-2 rounded-lg hover:bg-primary/20 text-slate-400 hover:text-primary transition-all" title="Ver">
-                                            <span class="material-symbols-outlined text-[20px]">visibility</span>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <!-- Row 4 -->
-                            <tr class="hover:bg-primary/5 transition-colors group">
-                                <td class="px-6 py-5 font-bold text-slate-900 dark:text-white">#A27-9404</td>
-                                <td class="px-6 py-5">
-                                    <div class="flex items-center gap-3">
-                                        <div class="size-8 rounded-full bg-slate-200 dark:bg-primary/20 flex items-center justify-center overflow-hidden">
-                                            <span class="material-symbols-outlined text-slate-400 dark:text-primary text-sm">person</span>
-                                        </div>
-                                        <span class="font-medium">Elena Rivas</span>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-5 text-slate-500 dark:text-slate-400">24/05/2024 19:10</td>
-                                <td class="px-6 py-5">
-                                    <div class="flex items-center gap-2">
-                                        <span class="material-symbols-outlined text-primary">account_balance_wallet</span>
-                                        <span class="text-sm">Apple Pay</span>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-5 font-bold text-slate-900 dark:text-white">$45.00</td>
-                                <td class="px-6 py-5 text-center">
-                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-green-100 dark:bg-green-500/10 text-green-700 dark:text-green-400">
-                                        COMPLETADO
-                                    </span>
-                                </td>
-                                <td class="px-6 py-5">
-                                    <div class="flex justify-center gap-2">
-                                        <button class="p-2 rounded-lg hover:bg-primary/20 text-slate-400 hover:text-primary transition-all" title="Ver">
-                                            <span class="material-symbols-outlined text-[20px]">visibility</span>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <!-- Row 5 -->
-                            <tr class="hover:bg-primary/5 transition-colors group">
-                                <td class="px-6 py-5 font-bold text-slate-900 dark:text-white">#A27-9405</td>
-                                <td class="px-6 py-5">
-                                    <div class="flex items-center gap-3">
-                                        <div class="size-8 rounded-full bg-slate-200 dark:bg-primary/20 flex items-center justify-center overflow-hidden">
-                                            <span class="material-symbols-outlined text-slate-400 dark:text-primary text-sm">person</span>
-                                        </div>
-                                        <span class="font-medium">Marcos Soto</span>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-5 text-slate-500 dark:text-slate-400">24/05/2024 18:55</td>
-                                <td class="px-6 py-5">
-                                    <div class="flex items-center gap-2">
-                                        <span class="material-symbols-outlined text-primary">credit_card</span>
-                                        <span class="text-sm">Amex •••• 1005</span>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-5 font-bold text-slate-900 dark:text-white">$112.75</td>
-                                <td class="px-6 py-5 text-center">
-                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-green-100 dark:bg-green-500/10 text-green-700 dark:text-green-400">
-                                        COMPLETADO
-                                    </span>
-                                </td>
-                                <td class="px-6 py-5">
-                                    <div class="flex justify-center gap-2">
-                                        <button class="p-2 rounded-lg hover:bg-primary/20 text-slate-400 hover:text-primary transition-all" title="Ver">
-                                            <span class="material-symbols-outlined text-[20px]">visibility</span>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <!-- Table Pagination -->
-                    <div class="flex items-center justify-between p-4 border-t border-primary/20 bg-primary/5">
-                        <p class="text-xs text-slate-500 dark:text-primary/60">Mostrando 1-10 de 1,240 transacciones</p>
-                        <div class="flex gap-1">
-                            <button class="size-8 flex items-center justify-center rounded-lg border border-primary/20 text-primary hover:bg-primary hover:text-slate-100 transition-all cursor-not-allowed opacity-50">
-                                <span class="material-symbols-outlined text-sm">chevron_left</span>
-                            </button>
-                            <button class="size-8 flex items-center justify-center rounded-lg bg-primary text-slate-100 font-bold text-xs">1</button>
-                            <button class="size-8 flex items-center justify-center rounded-lg border border-primary/20 text-slate-500 hover:text-primary hover:bg-primary/10 transition-all font-bold text-xs">2</button>
-                            <button class="size-8 flex items-center justify-center rounded-lg border border-primary/20 text-slate-500 hover:text-primary hover:bg-primary/10 transition-all font-bold text-xs">3</button>
-                            <button class="size-8 flex items-center justify-center rounded-lg border border-primary/20 text-primary hover:bg-primary hover:text-slate-100 transition-all">
-                                <span class="material-symbols-outlined text-sm">chevron_right</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </section>
+
+<main class="flex-1 flex flex-col min-w-0 overflow-y-auto">
+    <div class="p-6 lg:p-10">
+        <div class="mb-8">
+            <h2 class="text-slate-900 dark:text-slate-100 text-3xl font-black tracking-tight mb-1">
+                Historial de Compras
+            </h2>
+            <p class="text-slate-500 dark:text-primary/60 text-sm">
+                Visualiza y gestiona todas las facturas emitidas
+            </p>
         </div>
+
+        @if (TempData["Success"] != null)
+        {
+            <div class="mb-6 rounded-lg border border-green-500/30 bg-green-500/10 px-4 py-3 text-green-700 dark:text-green-400">
+                @TempData["Success"]
+            </div>
+        }
+
+        @if (TempData["Error"] != null)
+        {
+            <div class="mb-6 rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-red-700 dark:text-red-400">
+                @TempData["Error"]
+            </div>
+        }
+
+        <!-- Filtros -->
+        <div class="bg-background-light dark:bg-background-dark border border-primary/20 rounded-xl p-6 mb-6">
+            <form method="get" asp-action="Index" class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+                <!-- Filtro por Usuario -->
+                <div class="space-y-2">
+                    <label class="text-sm font-bold text-slate-700 dark:text-slate-300">Filtrar por Cliente</label>
+                    <select name="usuarioId" class="w-full bg-slate-100 dark:bg-primary/5 border border-primary/20 rounded-xl px-4 py-3 text-sm">
+                        <option value="">Todos los clientes</option>
+                        @if (usuarios != null)
+                        {
+                            @foreach (var u in usuarios)
+                            {
+                                <option value="@u.Identificacion" selected="@(usuarioFiltro == u.Identificacion ? "selected" : null)">
+                                    @u.NombreCompleto (@u.Identificacion)
+                                </option>
+                            }
+                        }
+                    </select>
+                </div>
+
+                @if (User.IsInRole("Contador") || User.IsInRole("Administrador"))
+                {
+                    <div class="space-y-2">
+                        <label class="text-sm font-bold text-slate-700 dark:text-slate-300">Fecha Inicio</label>
+                        <input type="date" name="fechaInicio" value="@fechaInicio"
+                               class="w-full bg-slate-100 dark:bg-primary/5 border border-primary/20 rounded-xl px-4 py-3 text-sm" />
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="text-sm font-bold text-slate-700 dark:text-slate-300">Fecha Fin</label>
+                        <input type="date" name="fechaFin" value="@fechaFin"
+                               class="w-full bg-slate-100 dark:bg-primary/5 border border-primary/20 rounded-xl px-4 py-3 text-sm" />
+                    </div>
+                }
+
+                <div class="flex gap-2">
+                    <button type="submit" class="px-6 py-3 bg-primary text-white rounded-xl font-bold text-sm hover:bg-primary/90">
+                        <span class="material-symbols-outlined align-middle text-lg">filter_alt</span>
+                        Filtrar
+                    </button>
+                    <a asp-action="Index" class="px-6 py-3 border border-primary/20 rounded-xl font-bold text-sm hover:bg-primary/10">
+                        Limpiar
+                    </a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Tabla de Facturas -->
+        <div class="bg-background-light dark:bg-background-dark border border-primary/20 rounded-xl shadow-xl overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-primary/5 border-b border-primary/20">
+                            <th class="px-6 py-4 text-xs font-bold uppercase"># Factura</th>
+                            <th class="px-6 py-4 text-xs font-bold uppercase">Fecha</th>
+                            <th class="px-6 py-4 text-xs font-bold uppercase">Cliente</th>
+                            <th class="px-6 py-4 text-xs font-bold uppercase">Tipo</th>
+                            <th class="px-6 py-4 text-xs font-bold uppercase">Subtotal</th>
+                            <th class="px-6 py-4 text-xs font-bold uppercase">IVA</th>
+                            <th class="px-6 py-4 text-xs font-bold uppercase">Total</th>
+                            <th class="px-6 py-4 text-xs font-bold uppercase text-center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-primary/10">
+                        @if (Model != null && Model.Any())
+                        {
+                            @foreach (var factura in Model)
+                            {
+                                var pedido = factura.CodigoPedidoNavigation;
+                                var usuario = pedido?.IdUsuarioNavigation;
+                                var horasTranscurridas = factura.Fecha.HasValue ? (DateTime.Now - factura.Fecha.Value).TotalHours : 999;
+                                var puedeReversar = horasTranscurridas <= 24 && (User.IsInRole("Administrador") || User.IsInRole("Contador"));
+
+                                <tr class="hover:bg-primary/5">
+                                    <td class="px-6 py-5 font-bold text-primary">#@factura.NumeroFactura</td>
+                                    <td class="px-6 py-5 text-sm">@factura.Fecha?.ToString("dd/MM/yyyy HH:mm")</td>
+                                    <td class="px-6 py-5 text-sm">@(usuario?.NombreCompleto ?? "Cliente genérico")</td>
+                                    <td class="px-6 py-5 text-sm">@(pedido?.TipoPedido ?? "N/A")</td>
+                                    <td class="px-6 py-5 text-sm">₡@factura.Subtotal?.ToString("N2")</td>
+                                    <td class="px-6 py-5 text-sm">₡@factura.Iva?.ToString("N2")</td>
+                                    <td class="px-6 py-5 text-sm font-bold">₡@factura.Total?.ToString("N2")</td>
+                                    <td class="px-6 py-5 text-center">
+                                        <div class="flex justify-center gap-2">
+                                            <a asp-action="DetalleFactura" asp-route-id="@factura.NumeroFactura"
+                                                   class="p-2 rounded-lg hover:bg-primary/20 text-slate-400 hover:text-primary" title="Ver detalle">
+                                                <span class="material-symbols-outlined text-[20px]">visibility</span>
+                                            </a>
+                                            
+                                            @if (puedeReversar)
+                                            {
+                                                <form asp-action="Reversar" method="post" class="inline"
+                                                      onsubmit="return confirm('¿Está seguro de reversar esta factura? El monto quedará como saldo a favor del cliente.')">
+                                                    <input type="hidden" name="facturaId" value="@factura.NumeroFactura" />
+                                                    <button type="submit" class="p-2 rounded-lg hover:bg-red-500/10 text-slate-400 hover:text-red-500" title="Reversar">
+                                                        <span class="material-symbols-outlined text-[20px]">undo</span>
+                                                    </button>
+                                                </form>
+                                            }
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="8" class="px-6 py-10 text-center text-slate-500">
+                                    No hay facturas registradas.
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="flex items-center justify-between p-4 border-t border-primary/20 bg-primary/5">
+                <p class="text-xs text-slate-500">
+                    Mostrando @(Model?.Count() ?? 0) factura(s)
+                </p>
+            </div>
+        </div>
+    </div>
+</main>

@@ -124,3 +124,24 @@ VALUES ('102', 'Delivery', NULL, 'Preparación', 'Entrega en barrio Los Ángeles',
 -- Pedido en mesa cancelado (mesa 2)
 INSERT INTO Pedidos (IdUsuario, TipoPedido, NumeroMesa, Estado, Observaciones, Total)
 VALUES ('102', 'Mesa', 2, 'Cancelado', 'Cliente canceló por demora', 0.00);
+
+ALTER TABLE Usuarios ADD UltimoLogin DATETIME NULL;
+
+SELECT * FROM Usuarios;
+
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Facturas')
+BEGIN
+    CREATE TABLE Facturas (
+        NumeroFactura INT IDENTITY(1,1) PRIMARY KEY,
+        CodigoPedido INT NULL,
+        IdUsuario NVARCHAR(50) NULL,
+        Subtotal DECIMAL(18,2) NULL,
+        Iva DECIMAL(18,2) NULL,
+        Propina DECIMAL(18,2) NULL,
+        CostoEmpaque DECIMAL(18,2) NULL,
+        CostoDelivery DECIMAL(18,2) NULL,
+        Total DECIMAL(18,2) NULL,
+        Fecha DATETIME NULL,
+        CONSTRAINT FK_Facturas_Pedido FOREIGN KEY (CodigoPedido) REFERENCES Pedidos(CodigoPedido)
+    );
+END

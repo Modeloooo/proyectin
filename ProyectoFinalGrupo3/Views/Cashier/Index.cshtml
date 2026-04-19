@@ -1,0 +1,80 @@
+﻿@model IEnumerable<ProyectoFinalGrupo3.Models.Pedido>
+
+@{
+    Layout = "~/Views/Shared/_CustomLayout.cshtml";
+    ViewData["Title"] = "Cashier";
+}
+
+<main class="flex-1 flex flex-col min-w-0 overflow-y-auto">
+    <div class="p-6 lg:p-10">
+        <div class="mb-8">
+            <h2 class="text-slate-900 dark:text-slate-100 text-3xl font-black tracking-tight mb-1">
+                Pedidos Listos para Cobro
+            </h2>
+            <p class="text-slate-500 dark:text-primary/60 text-sm">
+                Seleccione un pedido para facturar
+            </p>
+        </div>
+
+        @if (TempData["Success"] != null)
+        {
+            <div class="mb-6 rounded-lg border border-green-500/30 bg-green-500/10 px-4 py-3 text-green-700 dark:text-green-400">
+                @TempData["Success"]
+            </div>
+        }
+
+        @if (TempData["Error"] != null)
+        {
+            <div class="mb-6 rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-red-700 dark:text-red-400">
+                @TempData["Error"]
+            </div>
+        }
+
+        @if (Model == null || !Model.Any())
+        {
+            <div class="bg-background-light dark:bg-background-dark border border-primary/20 rounded-xl p-12 text-center">
+                <span class="material-symbols-outlined text-6xl text-slate-400 mb-4">receipt</span>
+                <p class="text-lg text-slate-500">No hay pedidos listos para cobro</p>
+            </div>
+        }
+        else
+        {
+            <div class="bg-background-light dark:bg-background-dark border border-primary/20 rounded-xl shadow-xl overflow-hidden">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-primary/5 border-b border-primary/20">
+                            <th class="px-6 py-4 text-xs font-bold uppercase"># Pedido</th>
+                            <th class="px-6 py-4 text-xs font-bold uppercase">Cliente</th>
+                            <th class="px-6 py-4 text-xs font-bold uppercase">Tipo</th>
+                            <th class="px-6 py-4 text-xs font-bold uppercase">Mesa</th>
+                            <th class="px-6 py-4 text-xs font-bold uppercase">Hora</th>
+                            <th class="px-6 py-4 text-xs font-bold uppercase text-center">Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-primary/10">
+                        @foreach (var pedido in Model)
+                        {
+                            <tr class="hover:bg-primary/5">
+                                <td class="px-6 py-5 font-bold text-primary">#@pedido.CodigoPedido</td>
+                                <td class="px-6 py-5">@(pedido.IdUsuarioNavigation?.NombreCompleto ?? "Cliente genérico")</td>
+                                <td class="px-6 py-5">@pedido.TipoPedido</td>
+                                <td class="px-6 py-5">@(pedido.NumeroMesaNavigation != null ? $"Mesa {pedido.NumeroMesa}" : "N/A")</td>
+                                <td class="px-6 py-5">@pedido.Fecha.ToString("HH:mm")</td>
+                                <td class="px-6 py-5 text-center">
+                                    <a asp-action="Facturar" asp-route-id="@pedido.CodigoPedido"
+                                           class="px-4 py-2 bg-primary text-white rounded-lg text-sm font-bold hover:bg-primary/90">
+                                        Facturar
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</main>
+
+<script>
+    setTimeout(function() { location.reload(); }, 30000);
+</script>

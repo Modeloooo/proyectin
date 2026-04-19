@@ -1,0 +1,64 @@
+﻿@model IEnumerable<ProyectoFinalGrupo3.Models.Factura>
+
+@{
+    Layout = "~/Views/Shared/_CustomLayout.cshtml";
+    ViewData["Title"] = "MisCompras";
+}
+
+<main class="flex-1 flex flex-col min-w-0 overflow-y-auto">
+    <div class="p-6 lg:p-10">
+        <div class="mb-8">
+            <h2 class="text-slate-900 dark:text-slate-100 text-3xl font-black tracking-tight mb-1">
+                Mis Compras
+            </h2>
+            <p class="text-slate-500 dark:text-primary/60 text-sm">
+                Historial de tus pedidos y facturas
+            </p>
+        </div>
+
+        <div class="bg-background-light dark:bg-background-dark border border-primary/20 rounded-xl shadow-xl overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-primary/5 border-b border-primary/20">
+                            <th class="px-6 py-4 text-xs font-bold uppercase"># Factura</th>
+                            <th class="px-6 py-4 text-xs font-bold uppercase">Fecha</th>
+                            <th class="px-6 py-4 text-xs font-bold uppercase">Tipo</th>
+                            <th class="px-6 py-4 text-xs font-bold uppercase">Total</th>
+                            <th class="px-6 py-4 text-xs font-bold uppercase text-center">Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-primary/10">
+                        @if (Model != null && Model.Any())
+                        {
+                            @foreach (var factura in Model)
+                            {
+                                var pedido = factura.CodigoPedidoNavigation;
+                                <tr class="hover:bg-primary/5">
+                                    <td class="px-6 py-5 font-bold text-primary">#@factura.NumeroFactura</td>
+                                    <td class="px-6 py-5 text-sm">@factura.Fecha?.ToString("dd/MM/yyyy HH:mm")</td>
+                                    <td class="px-6 py-5 text-sm">@(pedido?.TipoPedido ?? "N/A")</td>
+                                    <td class="px-6 py-5 text-sm font-bold">₡@factura.Total?.ToString("N2")</td>
+                                    <td class="px-6 py-5 text-center">
+                                        <a asp-action="DetalleFactura" asp-route-id="@factura.NumeroFactura"
+                                               class="p-2 rounded-lg hover:bg-primary/20 text-slate-400 hover:text-primary">
+                                            <span class="material-symbols-outlined text-[20px]">visibility</span>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="5" class="px-6 py-10 text-center text-slate-500">
+                                    No has realizado ninguna compra aún.
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</main>

@@ -1,0 +1,47 @@
+﻿@model IEnumerable<ProyectoFinalGrupo3.Models.Factura>
+
+@{
+    Layout = "~/Views/Shared/_CustomLayout.cshtml";
+    ViewData["Title"] = "HistorialFacturas";
+}
+
+<main class="flex-1 flex flex-col min-w-0 overflow-y-auto">
+    <div class="p-6 lg:p-10">
+        <div class="mb-8">
+            <h2 class="text-slate-900 dark:text-slate-100 text-3xl font-black tracking-tight mb-1">
+                Historial de Facturas
+            </h2>
+            <p class="text-slate-500 dark:text-primary/60 text-sm">
+                Últimas 100 facturas emitidas
+            </p>
+        </div>
+
+        <div class="bg-background-light dark:bg-background-dark border border-primary/20 rounded-xl shadow-xl overflow-hidden">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-primary/5 border-b border-primary/20">
+                        <th class="px-6 py-4 text-xs font-bold uppercase"># Factura</th>
+                        <th class="px-6 py-4 text-xs font-bold uppercase"># Pedido</th>
+                        <th class="px-6 py-4 text-xs font-bold uppercase">Fecha</th>
+                        <th class="px-6 py-4 text-xs font-bold uppercase">Subtotal</th>
+                        <th class="px-6 py-4 text-xs font-bold uppercase">IVA</th>
+                        <th class="px-6 py-4 text-xs font-bold uppercase">Total</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-primary/10">
+                    @foreach (var f in Model)
+                    {
+                        <tr class="hover:bg-primary/5">
+                            <td class="px-6 py-5 font-bold text-primary">#@f.NumeroFactura</td>
+                            <td class="px-6 py-5">#@f.CodigoPedido</td>
+                            <td class="px-6 py-5">@f.Fecha?.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td class="px-6 py-5">₡@f.Subtotal?.ToString("N2")</td>
+                            <td class="px-6 py-5">₡@f.Iva?.ToString("N2")</td>
+                            <td class="px-6 py-5 font-bold">₡@f.Total?.ToString("N2")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>

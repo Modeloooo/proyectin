@@ -27,7 +27,7 @@
             <span class="material-symbols-outlined">receipt_long</span>
             <span>Pedidos</span>
         </a>
-        <a onclick="document.location.href='@Url.Content("~/History/Index/")'" class="flex items-center gap-3 px-4 py-3 rounded-lg @(ViewData["Title"]?.ToString() == "History" ? "bg-primary text-background-dark font-semibold" : "text-text-muted hover:bg-neutral-gold/20 hover:text-primary")">
+        <a asp-controller="History" asp-action="Index" class="flex items-center gap-3 px-4 py-3 rounded-lg @(ViewData["Title"]?.ToString() == "History" ? "bg-primary text-background-dark font-semibold" : "text-text-muted hover:bg-neutral-gold/20 hover:text-primary")">
             <span class="material-symbols-outlined">history</span>
             <span>Historial de Compras</span>
         </a>

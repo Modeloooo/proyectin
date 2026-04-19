@@ -1,0 +1,128 @@
+﻿@{
+    Layout = "~/Views/Shared/_CustomLayout.cshtml";
+    ViewData["Title"] = "Panel Salonero";
+}
+
+@{
+    var mesas = ViewBag.Mesas as List<Mesa>;
+    var productos = ViewBag.Productos as List<Producto>;
+    var categorias = productos?.Select(p => p.CodigoCategoriaNavigation).Distinct().ToList();
+}
+
+<main class="flex-1 flex flex-col min-w-0 overflow-y-auto">
+    <div class="p-6 lg:p-10">
+        <div class="mb-8">
+            <h2 class="text-slate-900 dark:text-slate-100 text-3xl font-black tracking-tight mb-1">
+                Nuevo Pedido en Mesa
+            </h2>
+            <p class="text-slate-500 dark:text-primary/60 text-sm">
+                Seleccione una mesa y agregue productos al pedido
+            </p>
+        </div>
+
+        @if (TempData["Success"] != null)
+        {
+            <div class="mb-6 rounded-lg border border-green-500/30 bg-green-500/10 px-4 py-3 text-green-700">
+                @TempData["Success"]
+            </div>
+        }
+
+        @if (TempData["Error"] != null)
+        {
+            <div class="mb-6 rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-red-700">
+                @TempData["Error"]
+            </div>
+        }
+
+        <form asp-action="CrearPedido" method="post" id="formPedido">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Columna izquierda: Mesas -->
+                <div class="lg:col-span-1">
+                    <div class="bg-background-light dark:bg-background-dark border border-primary/20 rounded-xl p-6">
+                        <h3 class="text-lg font-bold mb-4">Mesas Disponibles</h3>
+                        
+                        <div class="grid grid-cols-2 gap-3">
+                            @foreach (var mesa in mesas)
+                            {
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="numeroMesa" value="@mesa.NumeroMesa" class="peer hidden" required />
+                                    <div class="border-2 border-primary/20 rounded-xl p-4 text-center peer-checked:border-primary peer-checked:bg-primary/10 transition-all">
+                                        <span class="material-symbols-outlined text-3xl">table_restaurant</span>
+                                        <p class="font-bold mt-2">Mesa @mesa.NumeroMesa</p>
+                                        <p class="text-xs text-slate-500">@mesa.Capacidad personas</p>
+                                    </div>
+                                </label>
+                            }
+                        </div>
+
+                        <div class="mt-6">
+                            <label class="block text-sm font-bold mb-2">Observaciones</label>
+                            <textarea name="observaciones" rows="3"
+                                      class="w-full bg-slate-100 dark:bg-primary/5 border border-primary/20 rounded-xl px-4 py-3 text-sm"
+                                      placeholder="Ej: Sin sal, término medio..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Columna derecha: Productos -->
+                <div class="lg:col-span-2">
+                    <div class="bg-background-light dark:bg-background-dark border border-primary/20 rounded-xl p-6">
+                        <h3 class="text-lg font-bold mb-4">Productos</h3>
+
+                        <div id="listaProductos" class="space-y-4 max-h-96 overflow-y-auto">
+                            @foreach (var producto in productos)
+                            {
+                                <div class="flex items-center justify-between border-b border-primary/10 pb-3">
+                                    <div class="flex-1">
+                                        <p class="font-bold">@producto.Nombre</p>
+                                        <p class="text-sm text-slate-500">@producto.CodigoCategoriaNavigation?.Descripcion | Stock: @producto.Cantidad</p>
+                                    </div>
+                                    <div class="flex items-center gap-3">
+                                        <p class="font-bold text-primary">₡@producto.Precio</p>
+                                        <input type="number" name="cantidades" value="0" min="0" max="@producto.Cantidad"
+                                               class="w-20 bg-slate-100 border border-primary/20 rounded-lg px-3 py-2 text-center" />
+                                        <input type="hidden" name="productoIds" value="@producto.CodigoProducto" />
+                                    </div>
+                                </div>
+                            }
+                        </div>
+
+                        <div id="resumenPedido" class="mt-6 p-4 bg-primary/5 rounded-xl">
+                            <p class="text-sm text-slate-500">Total del pedido</p>
+                            <p class="text-3xl font-black text-primary" id="totalPedido">₡0</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-end gap-4 mt-6">
+                <a href="@Url.Action("Index", "Dashboard")" class="px-6 py-2.5 text-sm font-bold text-slate-500 hover:text-slate-700">
+                    Cancelar
+                </a>
+                <button type="submit" class="px-8 py-2.5 bg-primary text-white rounded-xl font-bold text-sm shadow-lg shadow-primary/20 hover:bg-primary/90">
+                    Enviar a Cocina
+                </button>
+            </div>
+        </form>
+    </div>
+</main>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const inputs = document.querySelectorAll('input[name="cantidades"]');
+        const totalSpan = document.getElementById('totalPedido');
+        
+        function actualizarTotal() {
+            let total = 0;
+            document.querySelectorAll('#listaProductos > div').forEach((item, index) => {
+                const cantidad = parseInt(inputs[index].value) || 0;
+                const precioText = item.querySelector('.font-bold.text-primary').textContent;
+                const precio = parseFloat(precioText.replace('₡', '')) || 0;
+                total += cantidad * precio;
+            });
+            totalSpan.textContent = '₡' + total.toFixed(2);
+        }
+        
+        inputs.forEach(input => input.addEventListener('input', actualizarTotal));
+    });
+</script>

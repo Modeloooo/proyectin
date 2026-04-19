@@ -1,0 +1,84 @@
+﻿@model ProyectoFinalGrupo3.Models.Pedido
+
+@{
+    Layout = "~/Views/Shared/_CustomLayout.cshtml";
+    ViewData["Title"] = "DetallePedido";
+}
+
+<main class="flex-1 flex flex-col min-w-0 overflow-y-auto">
+    <div class="p-6 lg:p-10">
+        <div class="mb-8 flex items-center justify-between">
+            <div>
+                <h2 class="text-slate-900 dark:text-slate-100 text-3xl font-black tracking-tight mb-1">
+                    Detalle del Pedido #@Model.CodigoPedido
+                </h2>
+                <p class="text-slate-500 dark:text-primary/60 text-sm">
+                    @Model.Fecha.ToString("dd/MM/yyyy HH:mm") | @Model.TipoPedido
+                </p>
+            </div>
+            <a asp-action="MisPedidos" class="px-4 py-2 text-sm text-slate-500 hover:text-primary">
+                ← Volver
+            </a>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="lg:col-span-2">
+                <div class="bg-background-light dark:bg-background-dark border border-primary/20 rounded-xl p-6">
+                    <h3 class="text-lg font-bold mb-4">Productos</h3>
+                    
+                    <table class="w-full">
+                        <thead>
+                            <tr class="border-b border-primary/10">
+                                <th class="py-3 text-left text-xs font-bold uppercase text-slate-500">Producto</th>
+                                <th class="py-3 text-center text-xs font-bold uppercase text-slate-500">Cantidad</th>
+                                <th class="py-3 text-right text-xs font-bold uppercase text-slate-500">Precio</th>
+                                <th class="py-3 text-right text-xs font-bold uppercase text-slate-500">Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var detalle in Model.PedidoDetalles)
+                            {
+                                <tr class="border-b border-primary/5">
+                                    <td class="py-3">@detalle.CodigoProductoNavigation?.Nombre</td>
+                                    <td class="py-3 text-center">@detalle.Cantidad</td>
+                                    <td class="py-3 text-right">₡@detalle.PrecioUnitario.ToString("N2")</td>
+                                    <td class="py-3 text-right font-bold">₡@((detalle.Cantidad * detalle.PrecioUnitario).ToString("N2"))</td>
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="3" class="py-3 text-right font-bold">Total:</td>
+                                <td class="py-3 text-right font-black text-primary text-lg">₡@Model.Total.ToString("N2")</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+            <div class="lg:col-span-1">
+                <div class="bg-background-light dark:bg-background-dark border border-primary/20 rounded-xl p-6">
+                    <h3 class="text-lg font-bold mb-4">Información</h3>
+                    
+                    <div class="space-y-3">
+                        <div>
+                            <p class="text-xs text-slate-500">Mesa</p>
+                            <p class="font-bold">@(Model.NumeroMesaNavigation != null ? $"Mesa {Model.NumeroMesa}" : "N/A")</p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-slate-500">Estado</p>
+                            <p class="font-bold">@Model.Estado</p>
+                        </div>
+                        @if (!string.IsNullOrEmpty(Model.Observaciones))
+                        {
+                            <div>
+                                <p class="text-xs text-slate-500">Observaciones</p>
+                                <p class="text-sm">@Model.Observaciones</p>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>

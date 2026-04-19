@@ -1,0 +1,149 @@
+﻿@model IEnumerable<ProyectoFinalGrupo3.Models.Pedido>
+
+@{
+    Layout = "~/Views/Shared/_CustomLayout.cshtml";
+    ViewData["Title"] = "Kitchen";
+}
+
+<main class="flex-1 flex flex-col min-w-0 overflow-y-auto">
+    <div class="p-6 lg:p-10">
+        <div class="mb-8">
+            <h2 class="text-slate-900 dark:text-slate-100 text-3xl font-black tracking-tight mb-1">
+                Pedidos en Cocina
+            </h2>
+            <p class="text-slate-500 dark:text-primary/60 text-sm">
+                Gestiona el estado de cada ítem del pedido
+            </p>
+        </div>
+
+        @if (TempData["Success"] != null)
+        {
+            <div class="mb-6 rounded-lg border border-green-500/30 bg-green-500/10 px-4 py-3 text-green-700 dark:text-green-400">
+                @TempData["Success"]
+            </div>
+        }
+
+        @if (TempData["Error"] != null)
+        {
+            <div class="mb-6 rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-red-700 dark:text-red-400">
+                @TempData["Error"]
+            </div>
+        }
+
+        @if (Model == null || !Model.Any())
+        {
+            <div class="bg-background-light dark:bg-background-dark border border-primary/20 rounded-xl p-12 text-center">
+                <span class="material-symbols-outlined text-6xl text-slate-400 mb-4">checklist</span>
+                <p class="text-lg text-slate-500">No hay pedidos pendientes en cocina</p>
+            </div>
+        }
+        else
+        {
+            <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+                @foreach (var pedido in Model)
+                {
+                    var estadoClass = "border-yellow-500/30 bg-yellow-500/5";
+                    if (pedido.Estado == "Preparación" || pedido.Estado == "Preparacion")
+                    {
+                        estadoClass = "border-blue-500/30 bg-blue-500/5";
+                    }
+
+                    <div class="bg-background-light dark:bg-background-dark border @estadoClass rounded-xl shadow-lg overflow-hidden">
+                        <div class="px-6 py-4 border-b border-primary/10 flex justify-between items-center">
+                            <div>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-xl font-black text-primary">#@pedido.CodigoPedido</span>
+                                    <span class="text-sm px-2 py-0.5 rounded-full @(pedido.Estado == "Pendiente" ? "bg-yellow-500/20 text-yellow-600" : "bg-blue-500/20 text-blue-600")">
+                                        @pedido.Estado
+                                    </span>
+                                </div>
+                                <p class="text-sm text-slate-500">
+                                    @(pedido.NumeroMesaNavigation != null ? $"Mesa {pedido.NumeroMesa}" : "Delivery") |
+                                    @pedido.Fecha.ToString("HH:mm")
+                                </p>
+                            </div>
+                            <span class="material-symbols-outlined text-slate-400">restaurant</span>
+                        </div>
+
+                        <div class="p-4">
+                            @if (!string.IsNullOrEmpty(pedido.Observaciones))
+                            {
+                                <div class="mb-3 p-2 bg-primary/5 rounded-lg text-sm text-slate-600 dark:text-slate-400">
+                                    📝 @pedido.Observaciones
+                                </div>
+                            }
+
+                            <table class="w-full text-sm">
+                                <thead>
+                                    <tr class="border-b border-primary/10 text-slate-500 text-xs">
+                                        <th class="py-2 text-left">Producto</th>
+                                        <th class="py-2 text-center">Cant</th>
+                                        <th class="py-2 text-center">Estado</th>
+                                        <th class="py-2 text-right">Acción</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var detalle in pedido.PedidoDetalles)
+                                    {
+                                        var itemEstadoClass = "bg-slate-100 text-slate-600";
+                                        if (detalle.Estado == "En preparación")
+                                        {
+                                            itemEstadoClass = "bg-blue-500/20 text-blue-600";
+                                        }
+                                        else if (detalle.Estado == "Listo")
+                                        {
+                                            itemEstadoClass = "bg-green-500/20 text-green-600";
+                                        }
+
+                                        <tr class="border-b border-primary/5">
+                                            <td class="py-2">@detalle.CodigoProductoNavigation?.Nombre</td>
+                                            <td class="py-2 text-center">@detalle.Cantidad</td>
+                                            <td class="py-2 text-center">
+                                                <span class="px-2 py-0.5 rounded-full text-xs @itemEstadoClass">
+                                                    @detalle.Estado
+                                                </span>
+                                            </td>
+                                            <td class="py-2 text-right">
+                                                @if (detalle.Estado == "Pendiente")
+                                                {
+                                                    <form asp-action="CambiarEstadoDetalle" method="post" class="inline">
+                                                        <input type="hidden" name="detalleId" value="@detalle.Id" />
+                                                        <input type="hidden" name="nuevoEstado" value="En preparación" />
+                                                        <button type="submit" class="text-xs px-3 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+                                                            Iniciar
+                                                        </button>
+                                                    </form>
+                                                }
+                                                else if (detalle.Estado == "En preparación")
+                                                {
+                                                    <form asp-action="CambiarEstadoDetalle" method="post" class="inline">
+                                                        <input type="hidden" name="detalleId" value="@detalle.Id" />
+                                                        <input type="hidden" name="nuevoEstado" value="Listo" />
+                                                        <button type="submit" class="text-xs px-3 py-1 bg-green-500 text-white rounded-lg hover:bg-green-600">
+                                                            Listo
+                                                        </button>
+                                                    </form>
+                                                }
+                                                else if (detalle.Estado == "Listo")
+                                                {
+                                                    <span class="text-xs text-green-500">✓</span>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</main>
+
+<script>
+    // Recargar la página cada 30 segundos para ver nuevos pedidos
+    setTimeout(function() {
+        location.reload();
+    }, 30000);
+</script>

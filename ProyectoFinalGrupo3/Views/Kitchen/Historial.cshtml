@@ -1,0 +1,45 @@
+﻿@model IEnumerable<ProyectoFinalGrupo3.Models.Pedido>
+
+@{
+    Layout = "~/Views/Shared/_CustomLayout.cshtml";
+    ViewData["Title"] = "HistorialCocina";
+}
+
+<main class="flex-1 flex flex-col min-w-0 overflow-y-auto">
+    <div class="p-6 lg:p-10">
+        <div class="mb-8">
+            <h2 class="text-slate-900 dark:text-slate-100 text-3xl font-black tracking-tight mb-1">
+                Historial de Pedidos
+            </h2>
+            <p class="text-slate-500 dark:text-primary/60 text-sm">
+                Pedidos completados o cancelados
+            </p>
+        </div>
+
+        <div class="bg-background-light dark:bg-background-dark border border-primary/20 rounded-xl shadow-xl overflow-hidden">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-primary/5 border-b border-primary/20">
+                        <th class="px-6 py-4 text-xs font-bold uppercase"># Pedido</th>
+                        <th class="px-6 py-4 text-xs font-bold uppercase">Mesa</th>
+                        <th class="px-6 py-4 text-xs font-bold uppercase">Fecha</th>
+                        <th class="px-6 py-4 text-xs font-bold uppercase">Estado</th>
+                        <th class="px-6 py-4 text-xs font-bold uppercase">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var pedido in Model)
+                    {
+                        <tr class="border-b border-primary/10">
+                            <td class="px-6 py-4 text-primary font-bold">#@pedido.CodigoPedido</td>
+                            <td class="px-6 py-4">@(pedido.NumeroMesaNavigation != null ? $"Mesa {pedido.NumeroMesa}" : "Delivery")</td>
+                            <td class="px-6 py-4">@pedido.Fecha.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td class="px-6 py-4">@pedido.Estado</td>
+                            <td class="px-6 py-4">₡@pedido.Total.ToString("N2")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>

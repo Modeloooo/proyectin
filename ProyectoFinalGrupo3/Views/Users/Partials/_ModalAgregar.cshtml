@@ -1,7 +1,7 @@
 ﻿@{
-    var perfiles = new List<string> { "Administrador", "Usuario" };
-    var generos = new List<string> { "Masculino", "Femenino", "Otro" };
-    var tiposTarjeta = new List<string> { "Visa", "MasterCard", "American Express" };
+    var perfiles = new List<string> { "Administrador", "Usuario", "Contabilidad", "Salonero", "Cocina", "Cajero" };
+    var generos = new List<string> { "Masculino", "Femenino", "No especifica" };
+    var tiposTarjeta = new List<string> { "VISA", "MASTERCARD", "AMERICAN EXPRESS" };
 }
 
 <div id="modalAgregar" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0a0805]/80 backdrop-blur-sm hidden">
@@ -74,9 +74,8 @@
 
                     <div class="space-y-2">
                         <label class="text-sm font-bold text-slate-700 dark:text-slate-300 px-1">Contraseña</label>
-                        <input type="password" name="Contrasena"
-                               class="w-full bg-slate-100 dark:bg-primary/5 border border-primary/20 rounded-xl px-4 py-3 text-sm outline-none"
-                               required />
+                        <input type="password" name="Contrasena" id="inputContrasenaAgregar"
+                               class="w-full bg-slate-100 dark:bg-primary/5 border border-primary/20 rounded-xl px-4 py-3 text-sm outline-none" />
                     </div>
 
                     <div class="space-y-2">

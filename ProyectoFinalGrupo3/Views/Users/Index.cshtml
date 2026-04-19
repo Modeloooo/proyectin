@@ -38,6 +38,12 @@
                 @TempData["Error"]
             </div>
         }
+        @if (TempData["ContrasenaGenerada"] != null)
+        {
+            <div class="alert alert-success">
+                Contraseña generada: @TempData["ContrasenaGenerada"]
+            </div>
+        }
 
         <div class="bg-background-light dark:bg-background-dark border border-primary/20 rounded-xl shadow-xl overflow-hidden">
             <div class="overflow-x-auto">
@@ -110,9 +116,7 @@
 
                                     <td class="px-6 py-5">
                                         <div class="flex justify-center gap-2">
-                                            <button type="button"
-                                                    class="btnVer p-2 rounded-lg hover:bg-primary/20 text-slate-400 hover:text-primary transition-all"
-                                                    title="Ver"
+                                            <button type="button" class="btnVer p-2 rounded-lg hover:bg-primary/20 text-slate-400 hover:text-primary"
                                                     data-identificacion="@usuario.Identificacion"
                                                     data-nombrecompleto="@usuario.NombreCompleto"
                                                     data-genero="@usuario.Genero"
@@ -124,9 +128,7 @@
                                                 <span class="material-symbols-outlined text-[20px]">visibility</span>
                                             </button>
 
-                                            <button type="button"
-                                                    class="btnEditar p-2 rounded-lg hover:bg-primary/20 text-slate-400 hover:text-primary transition-all"
-                                                    title="Editar"
+                                            <button type="button" class="btnEditar p-2 rounded-lg hover:bg-primary/20 text-slate-400 hover:text-primary"
                                                     data-identificacion="@usuario.Identificacion"
                                                     data-nombrecompleto="@usuario.NombreCompleto"
                                                     data-genero="@usuario.Genero"
@@ -137,12 +139,19 @@
                                                 <span class="material-symbols-outlined text-[20px]">edit</span>
                                             </button>
 
-                                            <button type="button"
-                                                    class="btnEliminar p-2 rounded-lg hover:bg-red-500/10 text-slate-400 hover:text-red-500 transition-all"
-                                                    title="Eliminar"
+                                            <button type="button" class="btnEliminar p-2 rounded-lg hover:bg-red-500/10 text-slate-400 hover:text-red-500"
                                                     data-id="@usuario.Identificacion">
                                                 <span class="material-symbols-outlined text-[20px]">delete</span>
                                             </button>
+                                            <form asp-action="ResetearContrasena" method="post" style="display:inline;">
+                                                <input type="hidden" name="id" value="@usuario.Identificacion" />
+                                                <button type="submit"
+                                                        class="p-2 rounded-lg hover:bg-yellow-500/10 text-slate-400 hover:text-yellow-500 transition-all"
+                                                        title="Resetear contraseña"
+                                                        onclick="return confirm('¿Resetear contraseña de @usuario.NombreCompleto?')">
+                                                    <span class="material-symbols-outlined text-[20px]">restart_alt</span>
+                                                </button>
+                                            </form>
                                         </div>
                                     </td>
                                 </tr>
@@ -151,7 +160,7 @@
                         else
                         {
                             <tr>
-                                <td colspan="5" class="px-6 py-10 text-center text-slate-500 dark:text-slate-400">
+                                <td colspan="5" class="px-6 py-10 text-center text-slate-500">
                                     No hay usuarios registrados.
                                 </td>
                             </tr>
@@ -161,7 +170,7 @@
             </div>
 
             <div class="flex items-center justify-between p-4 border-t border-primary/20 bg-primary/5">
-                <p class="text-xs text-slate-500 dark:text-primary/60">
+                <p class="text-xs text-slate-500">
                     Mostrando @Model.Count() usuario(s) registrados
                 </p>
             </div>
@@ -174,6 +183,56 @@
 @await Html.PartialAsync("Partials/_ModalEliminar")
 @await Html.PartialAsync("Partials/_ModalVer")
 
+<!-- 🔥 MODAL CONTRASEÑA -->
+@if (TempData["ContrasenaGenerada"] != null)
+{
+    <div class="modal fade" id="modalContrasena" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title">Usuario Creado</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <p>Usuario: <strong>@TempData["UsuarioCreado"]</strong></p>
+                    <p>Contraseña generada:</p>
+
+                    <div class="input-group mb-3">
+                        <input type="text" id="txtContrasena" class="form-control text-center fw-bold"
+                               value="@TempData["ContrasenaGenerada"]" readonly>
+                        <button class="btn btn-outline-secondary" type="button" onclick="copiarContrasena()">
+                            📋 Copiar
+                        </button>
+                    </div>
+
+                    <p class="text-warning small">⚠️ Guarde esta contraseña. No se mostrará nuevamente.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Aceptar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
 @section Scripts {
     <script src="~/js/users.js"></script>
+
+    @if (TempData["ContrasenaGenerada"] != null)
+    {
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                var modal = new bootstrap.Modal(document.getElementById('modalContrasena'));
+                modal.show();
+            });
+
+            function copiarContrasena() {
+                var input = document.getElementById('txtContrasena');
+                input.select();
+                input.setSelectionRange(0, 99999);
+                navigator.clipboard.writeText(input.value);
+                alert('Contraseña copiada');
+            }
+        </script>
+    }
 }

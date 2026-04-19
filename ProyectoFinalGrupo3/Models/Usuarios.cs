@@ -16,7 +16,7 @@ namespace ProyectoFinalGrupo3.Models
         public string? TipoTarjeta { get; set; }
         public string? NumeroTarjeta { get; set; }
         public decimal? DineroDisponible { get; set; }
-        [Required(ErrorMessage = "La Contraseña es obligatoria")]
+        //[Required(ErrorMessage = "La Contraseña es obligatoria")]
         public string Contrasena { get; set; }
         public string Perfil { get; set; }
         public string? CodigoRecuperacion { get; set; }

@@ -1,0 +1,83 @@
+﻿@model IEnumerable<ProyectoFinalGrupo3.Models.PedidoDetalle>
+
+@{
+    Layout = "~/Views/Shared/_CustomLayout.cshtml";
+    ViewData["Title"] = "Detalles del Pedido";
+    var pedido = ViewBag.Pedido as Pedido;
+    var productos = ViewBag.Productos as List<Producto>;
+}
+
+<main class="flex-1 flex flex-col min-w-0 overflow-y-auto">
+    <div class="p-6 lg:p-10">
+        <div class="mb-8 flex items-center justify-between">
+            <div>
+                <h2 class="text-slate-900 dark:text-slate-100 text-3xl font-black tracking-tight mb-1">
+                    Pedido #@pedido?.CodigoPedido
+                </h2>
+                <p class="text-slate-500 dark:text-primary/60 text-sm">
+                    @pedido?.Fecha.ToString("dd/MM/yyyy HH:mm") | @pedido?.TipoPedido | Estado: @pedido?.Estado
+                </p>
+            </div>
+            <a asp-action="Index" class="px-4 py-2 text-sm text-slate-500 hover:text-primary">
+                ← Volver
+            </a>
+        </div>
+
+        <div class="bg-background-light dark:bg-background-dark border border-primary/20 rounded-xl p-6">
+            <h3 class="text-lg font-bold mb-4">Productos del Pedido</h3>
+            
+            <table class="w-full">
+                <thead>
+                    <tr class="border-b border-primary/10">
+                        <th class="py-3 text-left">Producto</th>
+                        <th class="py-3 text-center">Cantidad</th>
+                        <th class="py-3 text-right">Precio Unitario</th>
+                        <th class="py-3 text-right">Subtotal</th>
+                        <th class="py-3 text-center">Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        @foreach (var detalle in Model)
+                        {
+                            <tr class="border-b border-primary/5">
+                                <td class="py-3">
+                                    @(productos?.FirstOrDefault(p => p.CodigoProducto == detalle.CodigoProducto)?.Nombre ?? "Producto no encontrado")
+                                </td>
+                                <td class="py-3 text-center">@detalle.Cantidad</td>
+                                <td class="py-3 text-right">₡@detalle.PrecioUnitario.ToString("N2")</td>
+                                <td class="py-3 text-right font-bold">₡@((detalle.Cantidad * detalle.PrecioUnitario).ToString("N2"))</td>
+                                <td class="py-3 text-center">
+                                    <span class="px-2 py-1 rounded-full text-xs bg-slate-100 dark:bg-slate-800">
+                                        @detalle.Estado
+                                    </span>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="5" class="py-6 text-center text-slate-500">
+                                No hay detalles para este pedido
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            
+            @if (pedido != null)
+            {
+                <div class="mt-6 pt-4 border-t border-primary/10">
+                    <div class="flex justify-end">
+                        <div class="text-right">
+                            <p class="text-sm text-slate-500">Total del Pedido</p>
+                            <p class="text-2xl font-black text-primary">₡@pedido.Total.ToString("N2")</p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</main>

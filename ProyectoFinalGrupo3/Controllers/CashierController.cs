@@ -103,11 +103,11 @@ namespace ProyectoFinalGrupo3.Controllers
         {
             try
             {
-                var pedido = _context.Pedidos
+                var pedido = await _context.Pedidos
                     .Include(p => p.IdUsuarioNavigation)
                     .Include(p => p.PedidoDetalles)
                         .ThenInclude(d => d.CodigoProductoNavigation)
-                    .FirstOrDefault(p => p.CodigoPedido == codigoPedido);
+                    .FirstOrDefaultAsync(p => p.CodigoPedido == codigoPedido);
 
                 if (pedido == null)
                 {
@@ -117,8 +117,8 @@ namespace ProyectoFinalGrupo3.Controllers
 
                 // Calcular totales
                 decimal subtotal = pedido.PedidoDetalles.Sum(d => d.Cantidad * d.PrecioUnitario);
-                decimal iva = subtotal * IVA;
-                decimal propina = pedido.TipoPedido == "Dine-in" ? subtotal * PROPINA : 0;
+                decimal iva = subtotal * 0.13m;
+                decimal propina = pedido.TipoPedido == "Dine-in" ? subtotal * 0.10m : 0;
 
                 decimal costoEmpaque = 0;
                 if (pedido.TipoPedido == "Takeout")
@@ -127,32 +127,39 @@ namespace ProyectoFinalGrupo3.Controllers
                         (d.CodigoProductoNavigation?.CostoEmpaque ?? 0) * d.Cantidad);
                 }
 
-                decimal costoDelivery = pedido.TipoPedido == "Delivery" ? COSTO_DELIVERY : 0;
-                decimal totalCalculado = subtotal + iva + propina + costoEmpaque + costoDelivery;
+                decimal costoDelivery = pedido.TipoPedido == "Delivery" ? 2000m : 0;
+                decimal totalOriginal = subtotal + iva + propina + costoEmpaque + costoDelivery;
+                decimal totalAPagar = totalOriginal;
 
-                // Aplicar dinero disponible del usuario
                 var usuario = pedido.IdUsuarioNavigation;
                 decimal dineroUsado = 0;
 
-                if (usuario != null && usuario.DineroDisponible > 0)
+                // Aplicar saldo a favor
+                if (usuario != null && (usuario.DineroDisponible ?? 0) > 0)
                 {
-                    dineroUsado = Math.Min(usuario.DineroDisponible ?? 0, totalCalculado);
+                    dineroUsado = Math.Min(usuario.DineroDisponible ?? 0, totalAPagar);
                     usuario.DineroDisponible -= dineroUsado;
-                    totalCalculado -= dineroUsado;
+                    totalAPagar -= dineroUsado;
+
+                    // Guardar cambio del saldo inmediatamente
+                    _context.Usuarios.Update(usuario);
+                    await _context.SaveChangesAsync();
                 }
 
                 // Validar monto pagado
-                if (montoPagado < totalCalculado)
+                if (montoPagado < totalAPagar)
                 {
-                    TempData["Error"] = "El monto pagado es insuficiente";
+                    TempData["Error"] = $"Monto insuficiente. Total a pagar: ₡{totalAPagar:N2}";
                     return RedirectToAction("Facturar", new { id = codigoPedido });
                 }
 
-                // Calcular vuelto y guardarlo como dinero disponible
-                decimal vuelto = montoPagado - totalCalculado;
+                // Calcular vuelto
+                decimal vuelto = montoPagado - totalAPagar;
                 if (vuelto > 0 && usuario != null)
                 {
                     usuario.DineroDisponible = (usuario.DineroDisponible ?? 0) + vuelto;
+                    _context.Usuarios.Update(usuario);
+                    await _context.SaveChangesAsync();
                 }
 
                 // Descontar stock
@@ -175,16 +182,16 @@ namespace ProyectoFinalGrupo3.Controllers
                     Propina = propina,
                     CostoEmpaque = costoEmpaque,
                     CostoDelivery = costoDelivery,
-                    Total = subtotal + iva + propina + costoEmpaque + costoDelivery,
+                    Total = totalOriginal,
                     Fecha = DateTime.Now
                 };
 
                 _context.Facturas.Add(factura);
 
-                // Liberar mesa si es dine-in
+                // Liberar mesa
                 if (pedido.TipoPedido == "Dine-in" && pedido.NumeroMesa != null)
                 {
-                    var mesa = _context.Mesas.Find(pedido.NumeroMesa);
+                    var mesa = await _context.Mesas.FindAsync(pedido.NumeroMesa);
                     if (mesa != null)
                     {
                         mesa.Estado = "Libre";
@@ -192,13 +199,9 @@ namespace ProyectoFinalGrupo3.Controllers
                 }
 
                 pedido.Estado = "Pagado";
-                pedido.Total = factura.Total ?? 0;
+                pedido.Total = totalOriginal;
 
                 await _context.SaveChangesAsync();
-
-                // Generar y enviar PDF
-                var pdfBytes = GenerarFacturaPDF(factura, pedido);
-                await EnviarFacturaPorCorreo(pedido.IdUsuarioNavigation?.Correo, pdfBytes, factura.NumeroFactura);
 
                 TempData["Success"] = $"Factura #{factura.NumeroFactura} generada correctamente";
                 TempData["FacturaId"] = factura.NumeroFactura;

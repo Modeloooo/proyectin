@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProyectoFinalGrupo3.Data;
 using ProyectoFinalGrupo3.Models;
+using System.Security.Claims;
 
 namespace ProyectoFinalGrupo3.Controllers
 {
@@ -60,7 +61,7 @@ namespace ProyectoFinalGrupo3.Controllers
             return View(facturas);
         }
 
-        [Authorize(Roles = "Administrador,Contador")]
+        [Authorize(Roles = "Administrador,Contador,Cliente")]
         public IActionResult DetalleFactura(int id)
         {
             var factura = _context.Facturas
@@ -77,6 +78,17 @@ namespace ProyectoFinalGrupo3.Controllers
             {
                 TempData["Error"] = "Factura no encontrada";
                 return RedirectToAction("Index");
+            }
+
+            // Si es cliente, verificar que la factura sea suya
+            if (User.IsInRole("Cliente"))
+            {
+                var usuarioId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                if (factura.IdUsuario != usuarioId)
+                {
+                    TempData["Error"] = "No tiene permiso para ver esta factura";
+                    return RedirectToAction("MisCompras");
+                }
             }
 
             return View(factura);

@@ -1,0 +1,33 @@
+﻿@{
+    Layout = "~/Views/Shared/_CustomLayoutPublic.cshtml";
+    ViewData["Title"] = "Pedido Confirmado";
+}
+
+<main class="flex-1 flex items-center justify-center min-h-screen p-6">
+    <div class="bg-background-light dark:bg-background-dark border border-green-500/30 rounded-2xl p-12 text-center max-w-md">
+        <div class="size-20 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
+            <span class="material-symbols-outlined text-6xl text-green-500">check_circle</span>
+        </div>
+        
+        <h2 class="text-3xl font-black text-slate-900 dark:text-slate-100 mb-2">
+            ¡Pedido Confirmado!
+        </h2>
+        
+        <p class="text-lg text-slate-500 mb-6">
+            Tu pedido #@ViewBag.PedidoId ha sido registrado
+        </p>
+        
+        <p class="text-sm text-slate-400 mb-8">
+            Te notificaremos cuando esté listo para entrega.
+        </p>
+        
+        <div class="flex gap-4">
+            <a asp-action="CreateUserOrder" class="flex-1 px-6 py-3 bg-primary text-white rounded-xl font-bold hover:bg-primary/90">
+                Nuevo Pedido
+            </a>
+            <a asp-action="HistoryUserOrder" class="flex-1 px-6 py-3 border border-primary/20 rounded-xl font-bold hover:bg-primary/10">
+                Mis Pedidos
+            </a>
+        </div>
+    </div>
+</main>

@@ -668,6 +668,8 @@ namespace ProyectoFinalGrupo3.Controllers
                 Total = total
             };
 
+            ViewBag.Productos = _context.Productos.ToList();
+
             return View(model);
         }
 
@@ -701,6 +703,8 @@ namespace ProyectoFinalGrupo3.Controllers
                 MetodoEntrega = metodo
             };
 
+            ViewBag.Productos = _context.Productos.ToList();
+
             return View("DataUserOrder", model);
         }
 
@@ -708,27 +712,62 @@ namespace ProyectoFinalGrupo3.Controllers
         public IActionResult ConfirmarPedido(string metodoEntrega)
         {
             var carrito = HttpContext.Session.GetObject<List<CarritoItem>>("Carrito") ?? new List<CarritoItem>();
-            if (!carrito.Any()) return RedirectToAction("CartUserOrder");
 
-            decimal subtotal = carrito.Sum(c => c.Precio * c.Cantidad);
-            decimal iva = subtotal * 0.13m;
-            decimal envio = metodoEntrega == "Delivery" ? 2000 : 0;
-            decimal total = subtotal + iva + envio;
+            if (!carrito.Any())
+            {
+                TempData["Error"] = "El carrito está vacío";
+                return RedirectToAction("CartUserOrder");
+            }
+
+            if (string.IsNullOrEmpty(metodoEntrega))
+            {
+                TempData["Error"] = "Debe seleccionar un método de entrega";
+                return RedirectToAction("DataUserOrder");
+            }
 
             var usuarioId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var usuario = _context.Usuarios.FirstOrDefault(u => u.Identificacion == usuarioId);
 
+            if (usuario == null)
+            {
+                TempData["Error"] = "Usuario no encontrado";
+                return RedirectToAction("CartUserOrder");
+            }
+
             try
             {
+                decimal subtotal = carrito.Sum(c => c.Precio * c.Cantidad);
+                decimal iva = subtotal * 0.13m;
+                decimal envio = metodoEntrega == "Delivery" ? 2000m : 0m;
+                decimal total = subtotal + iva + envio;
+
+                // Validar stock antes de crear pedido
+                foreach (var item in carrito)
+                {
+                    var producto = _context.Productos.Find(item.CodigoProducto);
+                    if (producto == null)
+                    {
+                        TempData["Error"] = $"Producto '{item.Nombre}' no encontrado";
+                        return RedirectToAction("CartUserOrder");
+                    }
+
+                    if (producto.Cantidad < item.Cantidad)
+                    {
+                        TempData["Error"] = $"Stock insuficiente para '{producto.Nombre}'. Disponible: {producto.Cantidad}";
+                        return RedirectToAction("CartUserOrder");
+                    }
+                }
+
                 // Crear Pedido
                 var pedido = new Pedido
                 {
                     IdUsuario = usuario.Identificacion,
                     Fecha = DateTime.Now,
                     TipoPedido = metodoEntrega,
-                    Estado = "Preparacion",
+                    Estado = "Pendiente",
                     Total = total
                 };
+
                 _context.Pedidos.Add(pedido);
                 _context.SaveChanges();
 
@@ -745,42 +784,21 @@ namespace ProyectoFinalGrupo3.Controllers
                     };
                     _context.PedidoDetalles.Add(detalle);
                 }
-                _context.SaveChanges();
 
-                ViewBag.OrderSuccess = "True";
-                
-                var modelForView = new DataUCViewModel
-                {
-                    Usuario = usuario,
-                    Carrito = carrito,
-                    Subtotal = subtotal,
-                    IVA = iva,
-                    Envio = envio,
-                    Total = total,
-                    MetodoEntrega = metodoEntrega
-                };
+                _context.SaveChanges();
 
                 // Vaciar carrito
                 HttpContext.Session.SetObject("Carrito", new List<CarritoItem>());
 
-                return View("DataUserOrder", modelForView);
+                TempData["Success"] = $"¡Pedido #{pedido.CodigoPedido} creado exitosamente!";
+                TempData["PedidoCreado"] = pedido.CodigoPedido;
+
+                return RedirectToAction("PedidoConfirmado");
             }
             catch (Exception ex)
             {
-                ViewBag.OrderSuccess = "False";
-                ViewBag.OrderMessage = "Hubo un error al procesar el pedido.";
-
-                var modelForView = new DataUCViewModel
-                {
-                    Usuario = usuario,
-                    Carrito = carrito,
-                    Subtotal = subtotal,
-                    IVA = iva,
-                    Envio = envio,
-                    Total = total,
-                    MetodoEntrega = metodoEntrega
-                };
-                return View("DataUserOrder", modelForView);
+                TempData["Error"] = "Error al procesar el pedido: " + ex.Message;
+                return RedirectToAction("CartUserOrder");
             }
         }
         public IActionResult PaymentUserOrder()
@@ -820,6 +838,14 @@ namespace ProyectoFinalGrupo3.Controllers
         }
         public IActionResult DetailsOrdersCashier()
         {
+            return View();
+        }
+        public IActionResult PedidoConfirmado()
+        {
+            if (TempData["PedidoCreado"] == null)
+                return RedirectToAction("CreateUserOrder");
+
+            ViewBag.PedidoId = TempData["PedidoCreado"];
             return View();
         }
     }

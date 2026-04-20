@@ -40,7 +40,7 @@
                                     <td class="px-6 py-5 text-sm">@(pedido?.TipoPedido ?? "N/A")</td>
                                     <td class="px-6 py-5 text-sm font-bold">₡@factura.Total?.ToString("N2")</td>
                                     <td class="px-6 py-5 text-center">
-                                        <a asp-action="DetalleFactura" asp-route-id="@factura.NumeroFactura"
+                                        <a asp-controller="History" asp-action="DetalleFactura" asp-route-id="@factura.NumeroFactura"
                                                class="p-2 rounded-lg hover:bg-primary/20 text-slate-400 hover:text-primary">
                                             <span class="material-symbols-outlined text-[20px]">visibility</span>
                                         </a>
